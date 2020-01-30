@@ -1,0 +1,67 @@
+@import '../node_modules/nav-frontend-core/less/core';
+@import '../node_modules/nav-frontend-chevron-style/src/index';
+@import '../node_modules/nav-frontend-knapper-style/src/index';
+@import '../node_modules/nav-frontend-lenkepanel-style/src/index';
+@import '../node_modules/nav-frontend-paneler-style/src/index';
+@import '../node_modules/nav-frontend-skjema-style/src/index';
+@import '../node_modules/nav-frontend-typografi-style/src/index';
+@import '../node_modules/nav-frontend-alertstriper-style/src/index';
+@import '../node_modules/nav-datovelger/dist/datovelger/styles/datovelger.css';
+
+#root {
+  display: grid;
+  grid-template-columns: 20vw 30vw 30vw 20vw;
+  grid-template-rows: 10vh 90vh;
+  grid-template-areas:
+          "l-sidebar header header r-sidebar"
+          "l-sidebar main main r-sidebar"
+}
+
+.meny {
+  grid-area: l-sidebar;
+}
+
+.main {
+  grid-area: main;
+  display: flex;
+  place-self: start center;
+  flex-direction: column;
+  width: 30vw;
+}
+
+.egenstaende {
+  display: block;
+}
+
+.periodepanel {
+  overflow: hidden;
+}
+
+.periodeknapp {
+  float: right;
+}
+
+.float--right {
+  float: right;
+  padding: 0.5em
+}
+
+.float--left {
+  float: left;
+  padding: 0.5em
+}
+
+.header {
+  grid-area: header;
+  place-self: center;
+}
+
+.lenkepanel--liten {
+  padding: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+
+a {
+  color: @navBla;
+}
