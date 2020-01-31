@@ -8,6 +8,7 @@ import {Diagnoser} from "../Diagnoser";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
 import {API_URL} from "../App";
+import SelectSearch from 'react-select-search'
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -60,7 +61,8 @@ export default class OpprettSykmelding extends React.Component {
             begrunnikkekontakt: '',
             returverdi: '',
             periodedager: 0,
-            isLoaded: false
+            isLoaded: false,
+            simple: true,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -69,6 +71,11 @@ export default class OpprettSykmelding extends React.Component {
 
     componentDidMount() {
         this.setState({periodedager: antallPeriodeDager(this.state.perioder)})
+    }
+
+    handleSearchSelectChange(event) {
+        console.log(event);
+        this.setState({diagnosekode: event.value});
     }
 
     handleChange(event) {
@@ -97,6 +104,16 @@ export default class OpprettSykmelding extends React.Component {
         let dager = antallPeriodeDager(perioder);
         this.setState({perioder: perioder, periodedager: dager});
         event.preventDefault();
+    }
+
+    handleSimple() {
+        if (this.state.simple) {
+            let tidligsteDag = finnTidligsteDag(this.state.perioder);
+            this.setState({simple: !this.state.simple, syketilfelleStartDato: tidligsteDag, identdato: tidligsteDag, utstedelsesdato: tidligsteDag})
+        } else {
+            this.setState({simple: !this.state.simple});
+        }
+        console.log(this.state.simple);
     }
 
     addPeriode(event) {
@@ -136,12 +153,23 @@ export default class OpprettSykmelding extends React.Component {
             begrunnikkekontakt
         } = this.state;
 
+        let sdato = syketilfelleStartDato;
+        let idato = identdato;
+        let udato = utstedelsesdato;
+
         let data = new URLSearchParams();
+        if (this.state.simple) {
+            let tidligsteDag = finnTidligsteDag(perioder);
+            sdato = tidligsteDag;
+            idato = tidligsteDag;
+            udato = tidligsteDag;
+
+        }
         data.append("fnr", fnr);
         data.append("eid", eid);
-        data.append("syketilfelleStartDato", syketilfelleStartDato);
-        data.append("identdato", identdato);
-        data.append("utstedelsesdato", utstedelsesdato);
+        data.append("syketilfelleStartDato", sdato);
+        data.append("identdato", idato);
+        data.append("utstedelsesdato", udato);
         data.append("msgid", msgid);
         data.append("diagnosekode", diagnosekode);
         data.append("legefnr", legefnr);
@@ -171,8 +199,18 @@ export default class OpprettSykmelding extends React.Component {
         return (
             <React.Fragment>
                 <Undertittel>{this.props.tittel}</Undertittel>
-                {moment(finnTidligsteDag(this.state.perioder)) < moment(this.state.syketilfelleStartDato) && this.state.begrunnikkekontakt === ''
-                    ? <AlertStripeInfo>Vær klar over tilbakedatering uten begrunnelse!
+                <Checkbox
+                    label="Simple mode"
+                    name="simple"
+                    key="simple"
+                    className="flex--right"
+                    onChange={this.handleSimple.bind(this)}
+                    defaultChecked={this.state.simple}
+                />
+                {this.state.simple &&
+                <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}
+                {!this.state.simple && moment(finnTidligsteDag(this.state.perioder)) < moment(this.state.syketilfelleStartDato) && this.state.begrunnikkekontakt === ''
+                    ? <AlertStripeInfo className="blokk-xs">Vær klar over tilbakedatering uten begrunnelse!
                         <p className="blokk-xxxs">Startdato på syketilfelle er senere enn tidligste dag registrert i periodene.</p>
                     </AlertStripeInfo>
                     : <React.Fragment />}
@@ -182,6 +220,8 @@ export default class OpprettSykmelding extends React.Component {
                            key="fnr"
                            onChange={this.handleChange}
                     />
+                    { !this.state.simple &&
+                    <React.Fragment>
                     <Input label="Startdato på syketilfelle"
                            value={this.state.syketilfelleStartDato}
                            name="syketilfelleStartDato"
@@ -200,16 +240,15 @@ export default class OpprettSykmelding extends React.Component {
                            key="utstedelsesdato"
                            onChange={this.handleChange}
                     />
-                    <Select label="Diagnose"
-                            value={this.state.diagnosekode}
-                            name="diagnosekode"
-                            key="diagnosekode"
-                            onChange={this.handleChange}
-                    >
-                        {Object.keys(Diagnoser).map(diagnose => (
-                            <option key={diagnose} value={diagnose}>{Diagnoser[diagnose]} ({diagnose})</option>
-                        ))}
-                    </Select>
+                    <div className="skjemaelement">
+                        <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
+                        <SelectSearch options={Object.keys(Diagnoser).map(diagnose => ({name: `${Diagnoser[diagnose]} (${diagnose})`, value: diagnose}))}
+                                      value={this.state.diagnosekode}
+                                      name="diagnosekode"
+                                      key="diagnosekode"
+                                      onChange={this.handleSearchSelectChange.bind(this)}
+                        />
+                    </div>
                     <Input label="Fødselsnummer til lege"
                            value={this.state.legefnr}
                            name="legefnr"
@@ -242,6 +281,7 @@ export default class OpprettSykmelding extends React.Component {
                         onChange={this.handleChange}
                         defaultChecked={this.state.manglendeTilretteleggingPaaArbeidsplassen}
                     />
+                    </React.Fragment>}
                     <div className="float--right skjemaelement__sporsmal">{isNaN(this.state.periodedager) ? "Det er noe feil i periodene!" : this.state.periodedager + " dager"}</div>
                     <Knapp className="blokk-xs" onClick={this.addPeriode.bind(this)}>Legg til periode</Knapp>
                     {this.state.perioder.map((periode, idx) => (
@@ -285,6 +325,8 @@ export default class OpprettSykmelding extends React.Component {
                             </Select>
                         </SkjemaGruppe>
                     ))}
+                    { !this.state.simple &&
+                        <React.Fragment>
                     <Input label="Tilbakedatering: Kontaktdato (YYYY-MM-DD)"
                            value={this.state.kontaktdato}
                            name="kontaktdato"
@@ -297,6 +339,7 @@ export default class OpprettSykmelding extends React.Component {
                            key="begrunnikkekontakt"
                            onChange={this.handleChange}
                     />
+                        </React.Fragment>}
                     <Hovedknapp className='blokk-xs'>Send sykmelding</Hovedknapp>
                 </form>
                 { isLoaded ? <AlertStripeInfo>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeInfo> : <React.Fragment />}

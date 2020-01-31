@@ -7,7 +7,7 @@ import Testbrukere from "./Testbrukere";
 import OpprettSykmelding from "./OpprettSykmelding";
 import RegistrerNaermesteLeder from "./RegistrerNaermesteLeder";
 
-const Unimplemented = ({ side }) => <code>unimplemented!({side})</code>;
+const Unimplemented = ({ side }) => <code class="sentrert">unimplemented!({side})</code>;
 
 export const urlForSide = (side) => {
     switch(Sider[side]) {

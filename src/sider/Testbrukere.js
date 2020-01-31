@@ -11,13 +11,10 @@ export default class Testbrukere extends React.Component {
             returverdi: '',
             isLoaded: false
         };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
-        fetch(API_URL + "/testbrukere/")
+        fetch(API_URL + "/testbrukere")
             .then(res => res.text())
             .then(res => {
                 this.setState({isLoaded: true, returverdi: res});
@@ -33,6 +30,7 @@ export default class Testbrukere extends React.Component {
         return (
             <React.Fragment>
                 <Undertittel>{this.props.tittel}</Undertittel>
+                <p>Funker dårlig :)</p>
                 { isLoaded ? <code>{returverdi}</code> : <React.Fragment />}
             </React.Fragment>
         );
