@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Undertittel} from "nav-frontend-typografi";
 import {Input} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
-import {getTekst} from "../Nettverk";
+import {API_URL} from "../App";
 
 export default class NullstillSykmeldt extends React.Component {
     constructor(props) {
@@ -23,7 +23,11 @@ export default class NullstillSykmeldt extends React.Component {
     }
 
     handleSubmit(event) {
-        this.setState(getTekst("/nullstill/" + this.state.value));
+        fetch(API_URL + "/nullstill/" + this.state.value)
+            .then(res => res.text())
+            .then(res => {
+                this.setState({isLoaded: true, returverdi: res});
+            });
         event.preventDefault();
     }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Undertittel} from "nav-frontend-typografi";
-import {getTekst} from "../Nettverk";
+import {API_URL} from "../App";
 
 export default class Testbrukere extends React.Component {
     constructor(props) {
@@ -16,12 +16,12 @@ export default class Testbrukere extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
     componentDidMount() {
-        this.setState(getTekst("/testbrukere/"))
+        fetch(API_URL + "/testbrukere/")
+            .then(res => res.text())
+            .then(res => {
+                this.setState({isLoaded: true, returverdi: res});
+            });
     }
 
     handleSubmit(event) {

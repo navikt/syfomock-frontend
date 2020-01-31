@@ -5,6 +5,7 @@ import FinnAktorIdEllerFnr from "./FinnAktorIdEllerFnr";
 import FinnArbtakereHosOrgnr from "./FinnArbtakereHosOrgnr";
 import Testbrukere from "./Testbrukere";
 import OpprettSykmelding from "./OpprettSykmelding";
+import RegistrerNaermesteLeder from "./RegistrerNaermesteLeder";
 
 const Unimplemented = ({ side }) => <code>unimplemented!({side})</code>;
 
@@ -42,7 +43,7 @@ export const komponentForSide = (side) => {
         case Sider.NULLSTILL_SYKMELDT: return <NullstillSykmeldt tittel={Sider[side]}/>;
         case Sider.NULLSTILL_MOTEDELTAGER: return <Unimplemented side={side} />;
         case Sider.NULLSTILL_NAERMESTELEDER: return <Unimplemented side={side} />;
-        case Sider.REGISTRER_NAERMESTELEDER: return <Unimplemented side={side} />;
+        case Sider.REGISTRER_NAERMESTELEDER: return <RegistrerNaermesteLeder tittel={Sider[side]} />;
         case Sider.SETT_SYKMELDINGSSTATUS: return <Unimplemented side={side} />;
         case Sider.FINN_ARBTAKERE_HOS_ORGNR: return <FinnArbtakereHosOrgnr tittel={Sider[side]} />;
         case Sider.FINN_SYKMELDING_FRA_MOTTAKID: return <Unimplemented side={side} />;

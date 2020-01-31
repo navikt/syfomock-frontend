@@ -7,7 +7,7 @@ import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
-import {opprettSykmelding} from "../Nettverk";
+import {API_URL} from "../App";
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -155,7 +155,14 @@ export default class OpprettSykmelding extends React.Component {
         }
         data.append("kontaktdato", kontaktdato);
         data.append("begrunnikkekontakt", begrunnikkekontakt);
-        this.setState(opprettSykmelding(data));
+        fetch(API_URL + "/nyttmottak/sykmelding/opprett/", {
+            method: "POST",
+            body: data
+        })
+            .then(res => res.text())
+            .then(res => {
+                this.setState({isLoaded: true, returverdi: res});
+            });
         event.preventDefault();
     }
 
