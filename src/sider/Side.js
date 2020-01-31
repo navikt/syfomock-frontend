@@ -56,6 +56,6 @@ export const komponentForSide = (side) => {
         case Sider.TESTBRUKERE_STATUS: return <Testbrukere tittel={Sider[side]} />;
         case Sider.SETT_LEGACY_I_TILTAK: return <Unimplemented side={side} />;
         case Sider.LEGG_JOURNALPOST_PA_KO: return <Unimplemented side={side} />;
-        default: return <OpprettSykmelding tittel={Sider[Sider.OPPRETT_SYKMELDING]} />;
+        default: return <OpprettSykmelding tittel={Sider.OPPRETT_SYKMELDING} />;
     }
 }
