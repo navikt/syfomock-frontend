@@ -5,7 +5,7 @@ import {Input} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
 import AlertStripe from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
-import {API_URL} from "../App";
+import {getTekst} from "../Nettverk";
 
 const aktorIdEllerFnr = (side) => {
     switch(Sider[side]) {
@@ -18,24 +18,8 @@ const aktorIdEllerFnr = (side) => {
 export default class FinnAktorIdEllerFnr extends React.Component {
     finnAktorIdEllerFnr = (side, verdi) => {
         switch(Sider[side]) {
-            case Sider.FINN_AKTORID: fetch(API_URL + "/hentAktoerIdByFnr/" + verdi)
-                .then(res => res.text())
-                .then((result) => {
-                        this.setState({
-                            isLoaded: true,
-                            returverdi: result,
-                        });
-                    });
-                return;
-            case Sider.FINN_FNR: fetch(API_URL + "/hentFnrByAktoerId/" + verdi)
-                .then(res => res.text())
-                .then((result) => {
-                        this.setState({
-                            isLoaded: true,
-                            returverdi: result,
-                        })
-                    });
-                return;
+            case Sider.FINN_AKTORID: this.setState(getTekst("/hentAktoerIdByFnr/" + verdi)); return;
+            case Sider.FINN_FNR: this.setState(getTekst("/hentFnrByAktoerId/" + verdi)); return;
             default: return;
         }
     };

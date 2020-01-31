@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Undertittel} from "nav-frontend-typografi";
-import {API_URL} from "../App";
+import {getTekst} from "../Nettverk";
 
 export default class Testbrukere extends React.Component {
     constructor(props) {
@@ -21,14 +21,7 @@ export default class Testbrukere extends React.Component {
     }
 
     componentDidMount() {
-        fetch(API_URL + "/testbrukere")
-            .then(res => res.text())
-            .then((result) => {
-                this.setState({
-                    isLoaded: true,
-                    returverdi: result,
-                });
-            });
+        this.setState(getTekst("/testbrukere/"))
     }
 
     handleSubmit(event) {

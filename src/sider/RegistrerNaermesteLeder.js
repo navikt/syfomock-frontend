@@ -5,11 +5,17 @@ import {Input} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {getTekst} from "../Nettverk";
 
-export default class NullstillSykmeldt extends React.Component {
+export default class RegistrerNaermesteLeder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
+            brukerFnr: '',
+            lederFnr: '',
+            orgnummer: '',
+            telefonnummer: '',
+            epost: '',
+            aktivFom: '',
+            agForskutterer: false,
             returverdi: '',
             isLoaded: false
         };
@@ -23,7 +29,11 @@ export default class NullstillSykmeldt extends React.Component {
     }
 
     handleSubmit(event) {
-        this.setState(getTekst("/nullstill/" + this.state.value));
+        let {brukerFnr, lederFnr, orgnummer, telefonnummer, epost, aktivFom, agForskutterer} = this.state;
+        let url = new URL("/naermesteleder");
+        let params = {brukerFnr, lederFnr, orgnummer, telefonnummer, epost, aktivFom, agForskutterer};
+        url.search = new URLSearchParams(params).toString();
+        this.setState(getTekst(url));
         event.preventDefault();
     }
 
@@ -42,6 +52,6 @@ export default class NullstillSykmeldt extends React.Component {
     }
 }
 
-NullstillSykmeldt.propTypes = {
+RegistrerNaermesteLeder.propTypes = {
     tittel: PropTypes.string
 };

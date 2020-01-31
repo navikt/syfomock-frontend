@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Undertittel} from "nav-frontend-typografi";
 import {Input} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
-import {API_URL} from "../App";
+import {getTekst} from "../Nettverk";
 
 export default class FinnArbtakereHosOrgnr extends React.Component {
     constructor(props) {
@@ -23,17 +23,10 @@ export default class FinnArbtakereHosOrgnr extends React.Component {
     }
 
     handleSubmit(event) {
-        let url = new URL(API_URL + "/arbeidstakere");
+        let url = new URL("/arbeidstakere");
         let params = {orgnummer: this.state.value};
         url.search = new URLSearchParams(params).toString();
-        fetch(url)
-            .then(res => res.text())
-            .then((result) => {
-                this.setState({
-                    isLoaded: true,
-                    returverdi: result,
-                });
-            });
+        this.setState(getTekst(url));
         event.preventDefault();
     }
 

@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "classnames": "^2.2.6",
     "craco-less": "^1.15.0",
+    "express": "^4.17.1",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.24.0",
     "nav-datovelger": "^4.3.0",
@@ -20,7 +21,7 @@
     "nav-frontend-js-utils": "^1.0.6",
     "nav-frontend-knapper": "^1.0.15",
     "nav-frontend-knapper-style": "^0.3.14",
-    "nav-frontend-lenkepanel": "^1.0.36",
+    "nav-frontend-lenkepanel": "^1.0.37",
     "nav-frontend-lenkepanel-style": "^0.3.27",
     "nav-frontend-lukknapp": "^1.0.24",
     "nav-frontend-lukknapp-style": "^0.2.21",
@@ -29,6 +30,7 @@
     "nav-frontend-skjema-style": "^1.0.10",
     "nav-frontend-typografi": "^2.0.17",
     "nav-frontend-typografi-style": "^1.0.18",
+    "path": "^0.12.7",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-day-picker": "^7.4.0",
@@ -38,8 +40,9 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
-    "test": "craco test"
+    "build": "craco build src/index.html",
+    "test": "craco test",
+    "start-prod": "node server.js"
   },
   "eslintConfig": {
     "extends": "react-app"

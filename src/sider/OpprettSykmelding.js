@@ -4,10 +4,10 @@ import moment from 'moment';
 import {Undertittel} from "nav-frontend-typografi";
 import {Checkbox, Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
-import {API_URL} from "../App";
 import {Diagnoser} from "../Diagnoser";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
+import {opprettSykmelding} from "../Nettverk";
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -155,17 +155,7 @@ export default class OpprettSykmelding extends React.Component {
         }
         data.append("kontaktdato", kontaktdato);
         data.append("begrunnikkekontakt", begrunnikkekontakt);
-        fetch(API_URL + "/nyttmottak/sykmelding/opprett/", {
-            method: "POST",
-            body: data
-        })
-            .then(res => res.text())
-            .then((result) => {
-                this.setState({
-                    isLoaded: true,
-                    returverdi: result,
-                });
-            });
+        this.setState(opprettSykmelding(data));
         event.preventDefault();
     }
 

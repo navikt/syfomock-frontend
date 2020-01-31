@@ -11,9 +11,9 @@
 #root {
   display: grid;
   grid-template-columns: 20vw 30vw 30vw 20vw;
-  grid-template-rows: 10vh 90vh;
+  grid-template-rows: 5vh 95vh;
   grid-template-areas:
-          "l-sidebar header header r-sidebar"
+          "header main main r-sidebar"
           "l-sidebar main main r-sidebar"
 }
 
@@ -22,11 +22,11 @@
 }
 
 .main {
+  padding-top: 1rem;
   grid-area: main;
   display: flex;
   place-self: start center;
   flex-direction: column;
-  width: 30vw;
 }
 
 .egenstaende {
