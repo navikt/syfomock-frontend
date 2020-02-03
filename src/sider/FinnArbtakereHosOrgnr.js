@@ -1,54 +1,47 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import {Undertittel} from "nav-frontend-typografi";
-import {Input} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
+import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {useLocalStorageInput} from "../hooks";
+import {Sider} from "../Meny";
 
-export default class FinnArbtakereHosOrgnr extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: '',
-            returverdi: '',
-            isLoaded: false
-        };
+export default function FinnArbtakereHosOrgnr() {
+    const [orgnr, input] = useLocalStorageInput({label: "Organisasjonsnummer", key: "orgnr"});
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [returverdi, setReturverdi] = useState('');
+    const [error, setError] = useState('');
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
-    handleSubmit(event) {
-        let url = new URL("/arbeidstakere");
-        let params = {orgnummer: this.state.value};
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        let url = new URL(API_URL + "/arbeidstakere");
+        let params = {orgnummer: orgnr};
         url.search = new URLSearchParams(params).toString();
-        fetch(API_URL + url.toString())
+        fetch(url.toString())
             .then(res => res.text())
             .then(res => {
-                this.setState({isLoaded: true, returverdi: res});
+                setIsLoaded(true);
+                setReturverdi(res);
+            })
+            .catch(error => {
+                setIsLoaded(true);
+                setError(error.toString());
             });
-        event.preventDefault();
-    }
+    };
 
-    render() {
-        const {returverdi, isLoaded} = this.state;
-        return (
-            <React.Fragment>
-                <Undertittel>{this.props.tittel}</Undertittel>
-                <form onSubmit={this.handleSubmit}>
-                    <Input label="Organisasjonsnummer" onChange={this.handleChange}/>
-                    <Hovedknapp className='blokk-xs'>Finn arbeidstakere</Hovedknapp>
-                </form>
-                { isLoaded ? <code>{returverdi}</code> : <React.Fragment />}
-            </React.Fragment>
-        );
-    }
+    return (
+        <React.Fragment>
+            <Undertittel>{Sider.FINN_ARBTAKERE_HOS_ORGNR}</Undertittel>
+            <form onSubmit={e => handleSubmit(e)}>
+                {input}
+                <Hovedknapp className='blokk-xs'>Finn arbeidstakere</Hovedknapp>
+            </form>
+            { isLoaded ?
+                error === '' ?
+                    <code>{returverdi}</code> :
+                    <AlertStripeFeil>{error}</AlertStripeFeil>
+                : <React.Fragment />}
+        </React.Fragment>
+    );
+
 }
-
-FinnArbtakereHosOrgnr.propTypes = {
-    tittel: PropTypes.string
-};

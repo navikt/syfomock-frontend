@@ -20,7 +20,6 @@ export const Sider = {
   SLETT_OPPFOLGINGSDIALOG: "Slett oppfølgingsdialog",
   ENDRE_OPPFOLGINGSDIALOG: "Endre oppfølgingsdialog",
   PLANLAGT_VARSEL: "Planlagt varsel",
-  TESTBRUKERE_STATUS: "Testbrukere status",
   SETT_LEGACY_I_TILTAK: "Sett legacyfelter i tiltak",
   LEGG_JOURNALPOST_PA_KO: "Legg journalpost (inntektsmelding) på kø"
 };

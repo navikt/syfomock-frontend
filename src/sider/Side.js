@@ -1,11 +1,12 @@
 import {Sider} from "../Meny";
 import React from "react";
 import NullstillSykmeldt from "./NullstillSykmeldt";
-import FinnAktorIdEllerFnr from "./FinnAktorIdEllerFnr";
+import FinnFnr from "./FinnFnr";
 import FinnArbtakereHosOrgnr from "./FinnArbtakereHosOrgnr";
 import Testbrukere from "./Testbrukere";
 import OpprettSykmelding from "./OpprettSykmelding";
 import RegistrerNaermesteLeder from "./RegistrerNaermesteLeder";
+import FinnAktorId from "./FinnAktorId";
 
 const Unimplemented = ({ side }) => <code class="sentrert">unimplemented!({side})</code>;
 
@@ -28,7 +29,6 @@ export const urlForSide = (side) => {
         case Sider.SLETT_OPPFOLGINGSDIALOG: return "/slett_oppfolgingsdialog";
         case Sider.ENDRE_OPPFOLGINGSDIALOG: return "/endre_oppfolgingsdialog";
         case Sider.PLANLAGT_VARSEL: return "/planlagt_varsel";
-        case Sider.TESTBRUKERE_STATUS: return "/testbrukere_status";
         case Sider.SETT_LEGACY_I_TILTAK: return "/sett_legacy_i_tiltak";
         case Sider.LEGG_JOURNALPOST_PA_KO: return "/legg_journalpost_pa_ko";
         default: return "/opprett_sykmelding";
@@ -37,15 +37,15 @@ export const urlForSide = (side) => {
 
 export const komponentForSide = (side) => {
     switch(Sider[side]) {
-        case Sider.OPPRETT_SYKMELDING: return <OpprettSykmelding tittel={Sider[side]} />;
-        case Sider.FINN_AKTORID: return <FinnAktorIdEllerFnr side={side} />;
-        case Sider.FINN_FNR: return <FinnAktorIdEllerFnr side={side} />;
-        case Sider.NULLSTILL_SYKMELDT: return <NullstillSykmeldt tittel={Sider[side]}/>;
+        case Sider.OPPRETT_SYKMELDING: return <OpprettSykmelding />;
+        case Sider.FINN_AKTORID: return <FinnAktorId />;
+        case Sider.FINN_FNR: return <FinnFnr />;
+        case Sider.NULLSTILL_SYKMELDT: return <NullstillSykmeldt />;
         case Sider.NULLSTILL_MOTEDELTAGER: return <Unimplemented side={side} />;
         case Sider.NULLSTILL_NAERMESTELEDER: return <Unimplemented side={side} />;
-        case Sider.REGISTRER_NAERMESTELEDER: return <RegistrerNaermesteLeder tittel={Sider[side]} />;
+        case Sider.REGISTRER_NAERMESTELEDER: return <RegistrerNaermesteLeder />;
         case Sider.SETT_SYKMELDINGSSTATUS: return <Unimplemented side={side} />;
-        case Sider.FINN_ARBTAKERE_HOS_ORGNR: return <FinnArbtakereHosOrgnr tittel={Sider[side]} />;
+        case Sider.FINN_ARBTAKERE_HOS_ORGNR: return <FinnArbtakereHosOrgnr />;
         case Sider.FINN_SYKMELDING_FRA_MOTTAKID: return <Unimplemented side={side} />;
         case Sider.AKTIVITETSKRAV: return <Unimplemented side={side} />;
         case Sider.SLETT_DIALOGMOTER: return <Unimplemented side={side} />;
@@ -54,9 +54,8 @@ export const komponentForSide = (side) => {
         case Sider.SLETT_OPPFOLGINGSDIALOG: return <Unimplemented side={side} />;
         case Sider.ENDRE_OPPFOLGINGSDIALOG: return <Unimplemented side={side} />;
         case Sider.PLANLAGT_VARSEL: return <Unimplemented side={side} />;
-        case Sider.TESTBRUKERE_STATUS: return <Testbrukere tittel={Sider[side]} />;
         case Sider.SETT_LEGACY_I_TILTAK: return <Unimplemented side={side} />;
         case Sider.LEGG_JOURNALPOST_PA_KO: return <Unimplemented side={side} />;
-        default: return <OpprettSykmelding tittel={Sider.OPPRETT_SYKMELDING} />;
+        default: return <OpprettSykmelding />;
     }
 }

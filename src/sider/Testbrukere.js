@@ -1,42 +1,35 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {API_URL} from "../App";
+import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {Sider} from "../Meny";
 
-export default class Testbrukere extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: '',
-            returverdi: '',
-            isLoaded: false
-        };
-    }
+export default function Testbrukere() {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [returverdi, setReturverdi] = useState("");
+    const [error, setError] = useState("");
 
-    componentDidMount() {
+    useEffect(() => {
         fetch(API_URL + "/testbrukere")
             .then(res => res.text())
             .then(res => {
-                this.setState({isLoaded: true, returverdi: res});
+                setIsLoaded(true);
+                setReturverdi(res);
+            })
+            .catch(error => {
+                setIsLoaded(true);
+                setError(error.toString());
             });
-    }
+    });
 
-    handleSubmit(event) {
-        event.preventDefault();
-    }
-
-    render() {
-        const {returverdi, isLoaded} = this.state;
-        return (
-            <React.Fragment>
-                <Undertittel>{this.props.tittel}</Undertittel>
-                <p>Funker dårlig :)</p>
-                { isLoaded ? <code>{returverdi}</code> : <React.Fragment />}
-            </React.Fragment>
-        );
-    }
-}
-
-Testbrukere.propTypes = {
-    tittel: PropTypes.string
+    return (
+        <React.Fragment>
+            <Undertittel>{Sider.TESTBRUKERE_STATUS}</Undertittel>
+            <p>Funker dårlig :)</p>
+            {isLoaded ?
+                error === '' ? <code>{returverdi}</code>
+                    : <AlertStripeFeil>{error}</AlertStripeFeil>
+                : <React.Fragment/>}
+        </React.Fragment>
+    );
 };

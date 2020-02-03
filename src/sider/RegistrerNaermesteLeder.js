@@ -1,109 +1,69 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useCallback, useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
-import {Checkbox, Input} from "nav-frontend-skjema";
+import {Checkbox} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import moment from "moment";
+import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {useInput, useLocalStorageInput} from "../hooks";
+import {Sider} from "../Meny";
 
-export default class RegistrerNaermesteLeder extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            brukerFnr: '',
-            lederFnr: '',
-            orgnummer: '',
-            telefonnummer: '',
-            epost: '',
-            aktivFom: moment(new Date()).format("YYYY-MM-DD"),
-            agForskutterer: false,
-            returverdi: '',
-            isLoaded: false
-        };
+export default function RegistrerNaermesteLeder() {
+    const [brukerFnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
+    const [orgnummer, orgnrInput] = useLocalStorageInput({label: "Organisasjonsnummer", key: "orgnr"});
+    const [lederFnr, lederFnrInput] = useInput({label: "Fødselsnummer til ny nærmeste leder"});
+    const [telefonnummer, telefonnummerInput] = useInput({label: "Telefonnummer til ny nærmeste leder"});
+    const [epost, epostInput] = useInput({label: "E-post til ny nærmeste leder"});
+    const [aktivFom, aktivFomInput] = useInput({label: "Aktiv fra og med", initialState: moment().format("YYYY-MM-DD")});
+    const [agForskutterer, setAgForskutterer] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [returverdi, setReturverdi] = useState("");
+    const [error, setError] = useState("");
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    const handleCheck = useCallback(() => {
+        setAgForskutterer(!agForskutterer);
+    }, [agForskutterer]);
 
-    handleChange(event) {
-        let name = event.target.name;
-        let value = event.target.value;
-        if (name === "agForskutterer") {
-            value = event.target.value === "on";
-        }
-        this.setState({[name]: value});
-    }
-
-    handleSubmit(event) {
-        let {brukerFnr, lederFnr, orgnummer, telefonnummer, epost, aktivFom, agForskutterer} = this.state;
-        let url = new URL("/naermesteleder");
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        let url = new URL(API_URL + "/naermesteleder");
         let params = {brukerFnr, lederFnr, orgnummer, telefonnummer, epost, aktivFom, agForskutterer};
         url.search = new URLSearchParams(params).toString();
-        fetch(API_URL + url)
+        fetch(url)
             .then(res => res.text())
             .then(res => {
-                this.setState({isLoaded: true, returverdi: res});
+                setIsLoaded(true);
+                setReturverdi(res);
+            })
+            .catch(error => {
+                setIsLoaded(true);
+                setError(error.toString());
             });
-        event.preventDefault();
-    }
+    };
 
-    render() {
-        const {returverdi, isLoaded} = this.state;
-        return (
-            <React.Fragment>
-                <Undertittel>{this.props.tittel}</Undertittel>
-                <form onSubmit={this.handleSubmit}>
-                    <Input label="Fødselsnummer til ansatt"
-                           value={this.state.brukerFnr}
-                           name="brukerFnr"
-                           key="brukerFnr"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Fødselsnummer til ny nærmeste leder"
-                           value={this.state.lederFnr}
-                           name="lederFnr"
-                           key="lederFnr"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Organisasjonsnummer"
-                           value={this.state.orgnummer}
-                           name="orgnummer"
-                           key="orgnummer"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Telefonnummer til ny nærmeste leder"
-                           value={this.state.telefonnummer}
-                           name="telefonnummer"
-                           key="telefonnummer"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="E-post til ny nærmeste leder"
-                           value={this.state.epost}
-                           name="epost"
-                           key="epost"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Aktiv fra og med"
-                           value={this.state.aktivFom}
-                           name="aktivFom"
-                           key="aktivFom"
-                           onChange={this.handleChange}
-                    />
-                    <Checkbox
-                        label="Arbeidsgiver forskutterer"
-                        name="agForskutterer"
-                        key="agForskutterer"
-                        onChange={this.handleChange}
-                        defaultChecked={this.state.agForskutterer}
-                    />
-                    <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
-                </form>
-                { isLoaded ? <code>{returverdi}</code> : <React.Fragment />}
-            </React.Fragment>
-        );
-    }
+    return (
+        <React.Fragment>
+            <Undertittel>{Sider.REGISTRER_NAERMESTELEDER}</Undertittel>
+            <form onSubmit={handleSubmit}>
+                {fnrInput}
+                {lederFnrInput}
+                {orgnrInput}
+                {telefonnummerInput}
+                {epostInput}
+                {aktivFomInput}
+                <Checkbox
+                    label="Arbeidsgiver forskutterer"
+                    name="agForskutterer"
+                    key="agForskutterer"
+                    onClick={handleCheck}
+                    defaultChecked={agForskutterer}
+                />
+                <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
+            </form>
+            {isLoaded ?
+                error === '' ? <code>{returverdi}</code>
+                    : <AlertStripeFeil>{error}</AlertStripeFeil>
+                : <React.Fragment/>}
+        </React.Fragment>
+    );
 }
-
-RegistrerNaermesteLeder.propTypes = {
-    tittel: PropTypes.string
-};

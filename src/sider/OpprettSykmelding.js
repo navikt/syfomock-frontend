@@ -1,14 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useCallback, useState} from 'react';
 import moment from 'moment';
 import {Undertittel} from "nav-frontend-typografi";
 import {Checkbox, Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
 import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
+import {useInput, useLocalStorage, useLocalStorageInput} from "../hooks";
+import {Sider} from "../Meny";
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -17,7 +18,7 @@ function randomInteger(min, max) {
 function dagDiff(fom, tom) {
     let fomDate = moment(new Date(fom));
     let tomDate = moment(new Date(tom));
-    return tomDate.diff(fomDate, 'days')+1;
+    return tomDate.diff(fomDate, 'days') + 1;
 }
 
 function antallPeriodeDager(perioder) {
@@ -33,96 +34,77 @@ function finnTidligsteDag(perioder) {
 }
 
 
-export default class OpprettSykmelding extends React.Component {
-    constructor(props) {
-        super(props);
-        let startDato = new Date();
-        startDato.setDate(startDato.getDate()-6);
-        let datoString = moment(startDato).format("YYYY-MM-DD");
-        this.state = {
-            fnr: '',
-            eid: randomInteger(1000000000, 99999999999),
-            syketilfelleStartDato: datoString,
-            identdato: datoString,
-            utstedelsesdato: datoString,
-            msgid: randomInteger(1000000000, 99999999999),
-            diagnosekode: 'L87',
-            legefnr: '02125922395',
-            smtype: 'SM2013',
-            manglendeTilretteleggingPaaArbeidsplassen: false,
-            perioder: [
-                {
-                    "fom": datoString,
-                    "tom": moment(new Date()).format("YYYY-MM-DD"),
-                    "type": "HUNDREPROSENT"
-                }
-            ],
-            kontaktdato: '',
-            begrunnikkekontakt: '',
-            returverdi: '',
-            periodedager: 0,
-            isLoaded: false,
-            simple: true,
-        };
+export default function OpprettSykmelding() {
+    const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
+    const startdato = moment().subtract(6, 'days').format("YYYY-MM-DD");
+    const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useInput({label: "Startdato på syketilfelle", initialState: startdato});
+    const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato});
+    const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Utstedelsesdato", initialState: startdato});
+    const eid = randomInteger(1000000000, 99999999999);
+    const msgid = randomInteger(1000000000, 99999999999);
+    const [diagnosekode, setDiagnosekode] = useState("L87");
+    const [smtype, setSmtype] = useState("SM2013");
+    const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "0225922395"});
+    const [manglendeTilretteleggingPaaArbeidsplassen, setManglendeTilretteleggingPaaArbeidsplassen] = useState(false);
+    const [perioder, setPerioder] = useState([{
+        "fom": startdato,
+        "tom": moment().format("YYYY-MM-DD"),
+        "type": "HUNDREPROSENT"
+    }]);
+    const [kontaktdato, kontaktdatoInput] = useInput({label: "Tilbakedatering: Kontaktdato (YYYY-MM-DD)"});
+    const [begrunnikkekontakt, begrunnikkekontaktInput] = useInput({label: "Tilbakedatering: Begrunnelse"});
+    const [periodedager, setPeriodedager] = useState(antallPeriodeDager(perioder));
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [returverdi, setReturverdi] = useState('');
+    const [error, setError] = useState('');
+    const [simple, setSimple] = useLocalStorage('simple-mode', true);
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
 
-    componentDidMount() {
-        this.setState({periodedager: antallPeriodeDager(this.state.perioder)})
-    }
+    const handleManglendeTilretteleggingPaaArbeidsplassen = useCallback(() => {
+        setManglendeTilretteleggingPaaArbeidsplassen(!manglendeTilretteleggingPaaArbeidsplassen);
+    }, [manglendeTilretteleggingPaaArbeidsplassen]);
 
-    handleSearchSelectChange(event) {
-        console.log(event);
-        this.setState({diagnosekode: event.value});
-    }
-
-    handleChange(event) {
-        let name = event.target.name;
-        let value = event.target.value;
-        if (name === "manglendeTilretteleggingPaaArbeidsplassen") {
-            value = event.target.value === "on";
-        }
-        this.setState({[name]: value});
-    }
-
-    handlePeriodeChange(event) {
+    const handlePeriodeChange = (event) => {
         let idx = event.target.name[event.target.name.length - 1] - 1;
         let name = event.target.name.slice(0, -1);
-        let perioder = this.state.perioder;
-        perioder[idx][name] = event.target.value;
-        let dager = antallPeriodeDager(perioder);
-        this.setState({perioder: perioder, periodedager: dager});
-    }
+        let nyePerioder = perioder;
+        nyePerioder[idx][name] = event.target.value;
+        let dager = antallPeriodeDager(nyePerioder);
+        setPeriodedager(dager);
+        setPerioder(nyePerioder);
+    };
 
-    fjernPeriode(event) {
-        let idx = event.target.name[event.target.name.length - 1] - 1;
-        let perioder = this.state.perioder;
-        console.log(idx);
-        perioder.splice(idx, 1);
-        let dager = antallPeriodeDager(perioder);
-        this.setState({perioder: perioder, periodedager: dager});
+    const fjernPeriode = (event) => {
         event.preventDefault();
-    }
+        let idx = event.target.name[event.target.name.length - 1] - 1;
+        let nyePerioder = perioder;
+        console.log(idx);
+        nyePerioder.splice(idx, 1);
+        let dager = antallPeriodeDager(nyePerioder);
+        setPeriodedager(dager);
+        setPerioder(nyePerioder);
+    };
 
-    handleSimple() {
-        if (this.state.simple) {
-            let tidligsteDag = finnTidligsteDag(this.state.perioder);
-            this.setState({simple: !this.state.simple, syketilfelleStartDato: tidligsteDag, identdato: tidligsteDag, utstedelsesdato: tidligsteDag})
+    const handleSimple = useCallback(() => {
+        if (simple) {
+            let tidligsteDag = finnTidligsteDag(perioder);
+            setSyketilfelleStartDato(tidligsteDag);
+            setIdentdato(tidligsteDag);
+            setUtstedelsesdato(tidligsteDag);
+            setSimple(false);
         } else {
-            this.setState({simple: !this.state.simple});
+            setSimple(true);
         }
-        console.log(this.state.simple);
-    }
+    }, [simple, perioder, setSyketilfelleStartDato, setIdentdato, setUtstedelsesdato]);
 
-    addPeriode(event) {
-        let perioder = this.state.perioder;
-        let sistePeriode = perioder[perioder.length - 1];
+    const addPeriode = (event) => {
+        event.preventDefault();
+        let nyePerioder = perioder;
+        let sistePeriode = nyePerioder[nyePerioder.length - 1];
         let tom = new Date(sistePeriode.fom);
         let fom = new Date(tom);
-        fom.setDate(fom.getDate()-7);
-        tom.setDate(tom.getDate()-1);
+        fom.setDate(fom.getDate() - 7);
+        tom.setDate(tom.getDate() - 1);
         let tomString = moment(tom).format("YYYY-MM-DD");
         let fomString = moment(fom).format("YYYY-MM-DD");
         let periode = {
@@ -130,29 +112,14 @@ export default class OpprettSykmelding extends React.Component {
             tom: tomString,
             type: "HUNDREPROSENT"
         };
-        perioder.push(periode);
-        let dager = antallPeriodeDager(perioder);
-        this.setState({perioder: perioder, periodedager: dager});
+        nyePerioder.push(periode);
+        let dager = antallPeriodeDager(nyePerioder);
+        setPerioder(nyePerioder);
+        setPeriodedager(dager);
+    };
+
+    const handleSubmit = (event) => {
         event.preventDefault();
-    }
-
-    handleSubmit(event) {
-        const {
-            fnr,
-            eid,
-            syketilfelleStartDato,
-            identdato,
-            utstedelsesdato,
-            msgid,
-            diagnosekode,
-            legefnr,
-            smtype,
-            manglendeTilretteleggingPaaArbeidsplassen,
-            perioder,
-            kontaktdato,
-            begrunnikkekontakt
-        } = this.state;
-
         let sdato = syketilfelleStartDato;
         let idato = identdato;
         let udato = utstedelsesdato;
@@ -176,10 +143,15 @@ export default class OpprettSykmelding extends React.Component {
         data.append("smtype", smtype);
         data.append("manglendeTilretteleggingPaaArbeidsplassen", manglendeTilretteleggingPaaArbeidsplassen);
         for (let i = 0; i < perioder.length; i++) {
-            let idx = i+1;
-            data.append("fom"+idx, perioder[i].fom);
-            data.append("tom"+idx, perioder[i].tom);
-            data.append("type"+idx, perioder[i].type);
+            let idx = i + 1;
+            data.append("fom" + idx, perioder[i].fom);
+            data.append("tom" + idx, perioder[i].tom);
+            data.append("type" + idx, perioder[i].type);
+
+            if (moment(perioder[i].fom) > moment(perioder[i].tom)) {
+                setIsLoaded(true);
+                setError("Fra-verdi er etter Til-verdi i periode " + idx);
+            }
         }
         data.append("kontaktdato", kontaktdato);
         data.append("begrunnikkekontakt", begrunnikkekontakt);
@@ -189,77 +161,55 @@ export default class OpprettSykmelding extends React.Component {
         })
             .then(res => res.text())
             .then(res => {
-                this.setState({isLoaded: true, returverdi: res});
+                setIsLoaded(true);
+                setReturverdi(res);
+            })
+            .catch(error => {
+                setIsLoaded(true);
+                setError(error.toString());
             });
-        event.preventDefault();
-    }
+    };
 
-    render() {
-        const {returverdi, isLoaded} = this.state;
-        return (
-            <React.Fragment>
-                <Undertittel>{this.props.tittel}</Undertittel>
-                <Checkbox
-                    label="Simple mode"
-                    name="simple"
-                    key="simple"
-                    className="flex--right"
-                    onChange={this.handleSimple.bind(this)}
-                    defaultChecked={this.state.simple}
-                />
-                {this.state.simple &&
-                <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}
-                {!this.state.simple && moment(finnTidligsteDag(this.state.perioder)) < moment(this.state.syketilfelleStartDato) && this.state.begrunnikkekontakt === ''
-                    ? <AlertStripeInfo className="blokk-xs">Vær klar over tilbakedatering uten begrunnelse!
-                        <p className="blokk-xxxs">Startdato på syketilfelle er senere enn tidligste dag registrert i periodene.</p>
-                    </AlertStripeInfo>
-                    : <React.Fragment />}
-                <form onSubmit={this.handleSubmit}>
-                    <Input label="Fødselsnummer"
-                           name="fnr"
-                           key="fnr"
-                           onChange={this.handleChange}
-                    />
-                    { !this.state.simple &&
-                    <React.Fragment>
-                    <Input label="Startdato på syketilfelle"
-                           value={this.state.syketilfelleStartDato}
-                           name="syketilfelleStartDato"
-                           key="syketilfelleStartDato"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Identdato"
-                           value={this.state.identdato}
-                           name="identdato"
-                           key="identdato"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Utstedelsesdato"
-                           value={this.state.utstedelsesdato}
-                           name="utstedelsesdato"
-                           key="utstedelsesdato"
-                           onChange={this.handleChange}
-                    />
+    return (
+        <React.Fragment>
+            <Undertittel>{Sider.OPPRETT_SYKMELDING}</Undertittel>
+            <Checkbox
+                label="Simple mode"
+                name="simple"
+                key="simple"
+                className="flex--right"
+                onChange={handleSimple}
+                defaultChecked={simple}
+            />
+            {simple &&
+            <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}
+            {!simple && moment(finnTidligsteDag(perioder)) < moment(syketilfelleStartDato) && begrunnikkekontakt === ''
+                ? <AlertStripeInfo className="blokk-xs">Vær klar over tilbakedatering uten begrunnelse!
+                    <p className="blokk-xxxs">Startdato på syketilfelle er senere enn tidligste dag registrert i periodene.</p>
+                </AlertStripeInfo>
+                : <React.Fragment/>}
+            <form onSubmit={handleSubmit}>
+                {fnrInput}
+                {!simple &&
+                <React.Fragment>
+                    {syketilfelleInput}
+                    {identdatoInput}
+                    {utstedelsesdatoInput}
                     <div className="skjemaelement">
                         <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
                         <SelectSearch options={Object.keys(Diagnoser).map(diagnose => ({name: `${Diagnoser[diagnose]} (${diagnose})`, value: diagnose}))}
-                                      value={this.state.diagnosekode}
+                                      value={diagnosekode}
                                       name="diagnosekode"
                                       key="diagnosekode"
-                                      onChange={this.handleSearchSelectChange.bind(this)}
+                                      onChange={e => setDiagnosekode(e.value)}
                         />
                     </div>
-                    <Input label="Fødselsnummer til lege"
-                           value={this.state.legefnr}
-                           name="legefnr"
-                           key="legefnr"
-                           onChange={this.handleChange}
-                    />
+                    {legefnrInput}
                     <Select label="Sykmeldingstype"
-                            value={this.state.smtype}
+                            value={smtype}
                             name="smtype"
                             key="smtype"
-                            onChange={this.handleChange}
+                            onChange={e => setSmtype(e.target.value)}
                     >
                         <option key="SM2013" value="SM2013">SM2013 (V1)</option>
                         <option key="SM2013_diagnoseogfraværsgrunn" value="SM2013_diagnoseogfraværsgrunn">SM2013_diagnoseogfraværsgrunn</option>
@@ -278,76 +228,68 @@ export default class OpprettSykmelding extends React.Component {
                         label="Manglende tilrettelegging på arbeidsplassen"
                         name="manglendeTilretteleggingPaaArbeidsplassen"
                         key="manglendeTilretteleggingPaaArbeidsplassen"
-                        onChange={this.handleChange}
-                        defaultChecked={this.state.manglendeTilretteleggingPaaArbeidsplassen}
+                        onClick={handleManglendeTilretteleggingPaaArbeidsplassen}
+                        defaultChecked={manglendeTilretteleggingPaaArbeidsplassen}
                     />
-                    </React.Fragment>}
-                    <div className="float--right skjemaelement__sporsmal">{isNaN(this.state.periodedager) ? "Det er noe feil i periodene!" : this.state.periodedager + " dager"}</div>
-                    <Knapp className="blokk-xs" onClick={this.addPeriode.bind(this)}>Legg til periode</Knapp>
-                    {this.state.perioder.map((periode, idx) => (
-                        <SkjemaGruppe key={"periode"+(idx+1)} className="panel panel--border blokk-xs">
-                            { idx > 0 ? <Lukknapp className="periodeknapp" key={"fjern"+(idx+1)} name={"fjern"+(idx+1)} onClick={this.fjernPeriode.bind(this)}>Fjern periode</Lukknapp> : <React.Fragment />}
-                            <div className="periodetittel skjemaelement__sporsmal">{"Periode "+(idx+1)}</div>
-                            <div className="periodepanel">
-                                <Input label="Fra"
-                                       name={"fom"+(idx+1)}
-                                       key={"fom"+(idx+1)}
-                                       className="float--left"
-                                       value={periode.fom}
-                                       onChange={this.handlePeriodeChange.bind(this)}
-                                />
-                                <Input label="Til"
-                                       name={"tom"+(idx+1)}
-                                       key={"tom"+(idx+1)}
-                                       className="float--right"
-                                       value={periode.tom}
-                                       onChange={this.handlePeriodeChange.bind(this)}
-                                />
-                            </div>
-                            <Select label="Type"
-                                    name={"type"+(idx+1)}
-                                    key={"type"+(idx+1)}
-                                    selected={periode.type}
-                                    onChange={this.handlePeriodeChange.bind(this)}
-                                    className="egenstaende"
-                            >
-                                <option key='HUNDREPROSENT' value='HUNDREPROSENT'>100%</option>
-                                <option key='GRADERT_20' value='GRADERT_20'>20% gradert</option>
-                                <option key='GRADERT_40' value='GRADERT_40'>40% gradert</option>
-                                <option key='GRADERT_50' value='GRADERT_50'>50% gradert</option>
-                                <option key='GRADERT_60' value='GRADERT_60'>60% gradert</option>
-                                <option key='GRADERT_80' value='GRADERT_80'>80% gradert</option>
-                                <option key='AVVENTENDE' value='AVVENTENDE'>Avventende</option>
-                                <option key='GRADERT_REISETILSKUDD' value='GRADERT_REISETILSKUDD'>Gradert reisetilskudd</option>
-                                <option key='REISETILSKUDD' value='REISETILSKUDD'>Reisetilskudd</option>
-                                <option key='BEHANDLINGSDAGER' value='BEHANDLINGSDAGER'>4 behandlingsdager</option>
-                                <option key='BEHANDLINGSDAG' value='BEHANDLINGSDAG'>1 behandlingsdag</option>
-                            </Select>
-                        </SkjemaGruppe>
-                    ))}
-                    { !this.state.simple &&
-                        <React.Fragment>
-                    <Input label="Tilbakedatering: Kontaktdato (YYYY-MM-DD)"
-                           value={this.state.kontaktdato}
-                           name="kontaktdato"
-                           key="kontaktdato"
-                           onChange={this.handleChange}
-                    />
-                    <Input label="Tilbakedatering: Begrunnelse"
-                           value={this.state.begrunnikkekontakt}
-                           name="begrunnikkekontakt"
-                           key="begrunnikkekontakt"
-                           onChange={this.handleChange}
-                    />
-                        </React.Fragment>}
-                    <Hovedknapp className='blokk-xs'>Send sykmelding</Hovedknapp>
-                </form>
-                { isLoaded ? <AlertStripeInfo>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeInfo> : <React.Fragment />}
-            </React.Fragment>
-        );
-    }
+                </React.Fragment>}
+                <div
+                    className="float--right skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
+                <Knapp className="blokk-xs" onClick={addPeriode}>Legg til periode</Knapp>
+                {perioder.map((periode, idx) => (
+                    <SkjemaGruppe key={"periode" + (idx + 1)} className="panel panel--border blokk-xs">
+                        {idx > 0 ? <Lukknapp className="periodeknapp" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
+                            periode</Lukknapp> : <React.Fragment/>}
+                        <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
+                        <div className="periodepanel">
+                            <Input label="Fra"
+                                   name={"fom" + (idx + 1)}
+                                   key={"fom" + (idx + 1)}
+                                   className="float--left"
+                                   value={periode.fom}
+                                   onChange={handlePeriodeChange}
+                            />
+                            <Input label="Til"
+                                   name={"tom" + (idx + 1)}
+                                   key={"tom" + (idx + 1)}
+                                   className="float--right"
+                                   value={periode.tom}
+                                   onChange={handlePeriodeChange}
+                            />
+                        </div>
+                        <Select label="Type"
+                                name={"type" + (idx + 1)}
+                                key={"type" + (idx + 1)}
+                                selected={periode.type}
+                                onChange={handlePeriodeChange}
+                                className="egenstaende"
+                        >
+                            <option key='HUNDREPROSENT' value='HUNDREPROSENT'>100%</option>
+                            <option key='GRADERT_20' value='GRADERT_20'>20% gradert</option>
+                            <option key='GRADERT_40' value='GRADERT_40'>40% gradert</option>
+                            <option key='GRADERT_50' value='GRADERT_50'>50% gradert</option>
+                            <option key='GRADERT_60' value='GRADERT_60'>60% gradert</option>
+                            <option key='GRADERT_80' value='GRADERT_80'>80% gradert</option>
+                            <option key='AVVENTENDE' value='AVVENTENDE'>Avventende</option>
+                            <option key='GRADERT_REISETILSKUDD' value='GRADERT_REISETILSKUDD'>Gradert reisetilskudd</option>
+                            <option key='REISETILSKUDD' value='REISETILSKUDD'>Reisetilskudd</option>
+                            <option key='BEHANDLINGSDAGER' value='BEHANDLINGSDAGER'>4 behandlingsdager</option>
+                            <option key='BEHANDLINGSDAG' value='BEHANDLINGSDAG'>1 behandlingsdag</option>
+                        </Select>
+                    </SkjemaGruppe>
+                ))}
+                {!simple &&
+                <React.Fragment>
+                    {kontaktdatoInput}
+                    {begrunnikkekontaktInput}
+                </React.Fragment>
+                }
+                <Hovedknapp className='blokk-xs'>Send sykmelding</Hovedknapp>
+            </form>
+            {isLoaded ?
+                error === '' ?
+                    <AlertStripeInfo>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeInfo>
+                    : <AlertStripeFeil>{error}</AlertStripeFeil>
+                : <React.Fragment/>}
+        </React.Fragment>
+    );
 }
-
-OpprettSykmelding.propTypes = {
-    tittel: PropTypes.string
-};
