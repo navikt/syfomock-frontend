@@ -1,29 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Undertekst, Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
-import {useLocalStorageInput} from "../hooks";
+import {useGet, useLocalStorageInput} from "../hooks";
 
 export default function NullstillNarmesteLeder() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Sykmeldtes fødselsnummer", key: "fnr"});
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState('');
-    const [error, setError] = useState('');
+    const [get, isLoaded, returverdi, error] = useGet();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch(API_URL + "/nullstill-nl/" + fnr)
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString())
-            });
+        get(API_URL + "/nullstill-nl/" + fnr);
     };
 
     return (

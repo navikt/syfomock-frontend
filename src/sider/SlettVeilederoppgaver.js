@@ -1,35 +1,21 @@
 import React, {useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import AlertStripe, {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
 import {API_URL} from "../App";
-import {useLocalStorageInput} from "../hooks";
+import {useGet, useLocalStorageInput} from "../hooks";
 import {Select} from "nav-frontend-skjema";
 
 export default function SlettVeilederoppgaver() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
     const [type, setType] = useState("ALLE_OPPGAVER");
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState("");
-    const [error, setError] = useState("");
+    const [get, isLoaded, returverdi, error] = useGet();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        let param = "/veilederoppgaver/slett?fnr=" + fnr;
-        if (type === "MOTEBEHOV_MOTTATT") {
-            param = "/veilederoppgaver/motebehov/slett?fnr=" + fnr;
-        }
-        fetch(API_URL + param)
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-            });
+        let param = type === "MOTEBEHOV_MOTTATT" ? "/veilederoppgaver/motebehov/slett?fnr=" + fnr : "/veilederoppgaver/slett?fnr=" + fnr;
+        get(API_URL + param);
     };
 
     return (

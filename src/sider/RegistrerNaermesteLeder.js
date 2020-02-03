@@ -5,7 +5,7 @@ import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import moment from "moment";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
-import {useInput, useLocalStorageInput} from "../hooks";
+import {useGet, useInput, useLocalStorageInput} from "../hooks";
 import {Sider} from "../Meny";
 
 export default function RegistrerNaermesteLeder() {
@@ -16,9 +16,7 @@ export default function RegistrerNaermesteLeder() {
     const [epost, epostInput] = useInput({label: "E-post til ny nærmeste leder"});
     const [aktivFom, aktivFomInput] = useInput({label: "Aktiv fra og med", initialState: moment().format("YYYY-MM-DD")});
     const [agForskutterer, setAgForskutterer] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState("");
-    const [error, setError] = useState("");
+    const [get, isLoaded, returverdi, error] = useGet();
 
     const handleCheck = useCallback(() => {
         setAgForskutterer(!agForskutterer);
@@ -29,16 +27,7 @@ export default function RegistrerNaermesteLeder() {
         let url = new URL(API_URL + "/naermesteleder");
         let params = {brukerFnr, lederFnr, orgnummer, telefonnummer, epost, aktivFom, agForskutterer};
         url.search = new URLSearchParams(params).toString();
-        fetch(url)
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-            });
+        get(url.toString());
     };
 
     return (

@@ -4,16 +4,13 @@ import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
-import {useInput, useLocalStorageInput} from "../hooks";
+import {useGet, useInput} from "../hooks";
 import SelectSearch from "react-select-search";
-import {Diagnoser} from "../Diagnoser";
 
 export default function SettSykmeldingsstatus() {
     const [uuid, uuidInput] = useInput({label: "Sykmeldings-ID"});
     const [status, setStatus] = useState("NY");
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState('');
-    const [error, setError] = useState('');
+    const [get, isLoaded, returverdi, error] = useGet();
     const options = [
         "NY", "AVBRUTT", "AVVIST", "BEKREFTET", "SENDT", "UTGAATT"
     ];
@@ -23,16 +20,7 @@ export default function SettSykmeldingsstatus() {
         let url = new URL(API_URL + "/sykmelding/status");
         let params = {status, meldingid: uuid};
         url.search = new URLSearchParams(params).toString();
-        fetch(url)
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString())
-            });
+        get(url.toString());
     };
 
     return (

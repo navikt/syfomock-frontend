@@ -8,7 +8,7 @@ import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
 import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
-import {useInput, useLocalStorage, useLocalStorageInput} from "../hooks";
+import {useFormPost, useInput, useLocalStorage, useLocalStorageInput} from "../hooks";
 import {Sider} from "../Meny";
 
 function randomInteger(min, max) {
@@ -54,11 +54,8 @@ export default function OpprettSykmelding() {
     const [kontaktdato, kontaktdatoInput] = useInput({label: "Tilbakedatering: Kontaktdato (YYYY-MM-DD)"});
     const [begrunnikkekontakt, begrunnikkekontaktInput] = useInput({label: "Tilbakedatering: Begrunnelse"});
     const [periodedager, setPeriodedager] = useState(antallPeriodeDager(perioder));
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState('');
-    const [error, setError] = useState('');
     const [simple, setSimple] = useLocalStorage('simple-mode', true);
-
+    const [post, isLoaded, returverdi, error, setIsLoaded, setError] = useFormPost();
 
     const handleManglendeTilretteleggingPaaArbeidsplassen = useCallback(() => {
         setManglendeTilretteleggingPaaArbeidsplassen(!manglendeTilretteleggingPaaArbeidsplassen);
@@ -95,7 +92,7 @@ export default function OpprettSykmelding() {
         } else {
             setSimple(true);
         }
-    }, [simple, perioder, setSyketilfelleStartDato, setIdentdato, setUtstedelsesdato]);
+    }, [simple, setSimple, perioder, setSyketilfelleStartDato, setIdentdato, setUtstedelsesdato]);
 
     const addPeriode = (event) => {
         event.preventDefault();
@@ -125,7 +122,7 @@ export default function OpprettSykmelding() {
         let udato = utstedelsesdato;
 
         let data = new URLSearchParams();
-        if (this.state.simple) {
+        if (simple) {
             let tidligsteDag = finnTidligsteDag(perioder);
             sdato = tidligsteDag;
             idato = tidligsteDag;
@@ -141,7 +138,7 @@ export default function OpprettSykmelding() {
         data.append("diagnosekode", diagnosekode);
         data.append("legefnr", legefnr);
         data.append("smtype", smtype);
-        data.append("manglendeTilretteleggingPaaArbeidsplassen", manglendeTilretteleggingPaaArbeidsplassen);
+        data.append("manglendeTilretteleggingPaaArbeidsplassen", manglendeTilretteleggingPaaArbeidsplassen.toString());
         for (let i = 0; i < perioder.length; i++) {
             let idx = i + 1;
             data.append("fom" + idx, perioder[i].fom);
@@ -155,141 +152,127 @@ export default function OpprettSykmelding() {
         }
         data.append("kontaktdato", kontaktdato);
         data.append("begrunnikkekontakt", begrunnikkekontakt);
-        fetch(API_URL + "/nyttmottak/sykmelding/opprett/", {
-            method: "POST",
-            body: data
-        })
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-            });
+        post(API_URL + "/nyttmottak/sykmelding/opprett/", data);
     };
 
-    return (
-        <React.Fragment>
-            <Undertittel>{Sider.OPPRETT_SYKMELDING}</Undertittel>
-            <Checkbox
-                label="Simple mode"
-                name="simple"
-                key="simple"
-                className="flex--right"
-                onChange={handleSimple}
-                defaultChecked={simple}
-            />
-            {simple &&
-            <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}
-            {!simple && moment(finnTidligsteDag(perioder)) < moment(syketilfelleStartDato) && begrunnikkekontakt === ''
-                ? <AlertStripeInfo className="blokk-xs">Vær klar over tilbakedatering uten begrunnelse!
-                    <p className="blokk-xxxs">Startdato på syketilfelle er senere enn tidligste dag registrert i periodene.</p>
-                </AlertStripeInfo>
-                : <React.Fragment/>}
-            <form onSubmit={handleSubmit}>
-                {fnrInput}
-                {!simple &&
-                <React.Fragment>
-                    {syketilfelleInput}
-                    {identdatoInput}
-                    {utstedelsesdatoInput}
-                    <div className="skjemaelement">
-                        <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
-                        <SelectSearch options={Object.keys(Diagnoser).map(diagnose => ({name: `${Diagnoser[diagnose]} (${diagnose})`, value: diagnose}))}
-                                      value={diagnosekode}
-                                      name="diagnosekode"
-                                      key="diagnosekode"
-                                      onChange={e => setDiagnosekode(e.value)}
+    return <React.Fragment>
+        <Undertittel>{Sider.OPPRETT_SYKMELDING}</Undertittel>
+        <Checkbox
+            label="Simple mode"
+            name="simple"
+            key="simple"
+            className="flex--right"
+            onChange={handleSimple}
+            defaultChecked={simple}
+        />
+        {simple &&
+        <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}
+        {!simple && moment(finnTidligsteDag(perioder)) < moment(syketilfelleStartDato) && begrunnikkekontakt === ''
+            ? <AlertStripeInfo className="blokk-xs">Vær klar over tilbakedatering uten begrunnelse!
+                <p className="blokk-xxxs">Startdato på syketilfelle er senere enn tidligste dag registrert i periodene.</p>
+            </AlertStripeInfo>
+            : <React.Fragment/>}
+        <form onSubmit={handleSubmit}>
+            {fnrInput}
+            {!simple &&
+            <React.Fragment>
+                {syketilfelleInput}
+                {identdatoInput}
+                {utstedelsesdatoInput}
+                <div className="skjemaelement">
+                    <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
+                    <SelectSearch options={Object.keys(Diagnoser).map(diagnose => ({name: `${Diagnoser[diagnose]} (${diagnose})`, value: diagnose}))}
+                                  value={diagnosekode}
+                                  name="diagnosekode"
+                                  key="diagnosekode"
+                                  onChange={e => setDiagnosekode(e.value)}
+                    />
+                </div>
+                {legefnrInput}
+                <Select label="Sykmeldingstype"
+                        value={smtype}
+                        name="smtype"
+                        key="smtype"
+                        onChange={e => setSmtype(e.target.value)}
+                >
+                    <option key="SM2013" value="SM2013">SM2013 (V1)</option>
+                    <option key="SM2013_diagnoseogfraværsgrunn" value="SM2013_diagnoseogfraværsgrunn">SM2013_diagnoseogfraværsgrunn</option>
+                    <option key="SM2013_forenklet" value="SM2013_forenklet">SM2013_forenklet</option>
+                    <option key="SM2013_NAV_Arbeidsgiver_Melding" value="SM2013_NAV_Arbeidsgiver_Melding">SM2013_NAV_Arbeidsgiver_Melding</option>
+                    <option key="SM2013_normal" value="SM2013_normal">SM2013_normal</option>
+                    <option key="SM2013_uten_arbeidsgiver" value="SM2013_uten_arbeidsgiver">SM2013_uten_arbeidsgiver</option>
+                    <option key="SM2013_7uker" value="SM2013_7uker">SM2013_7uker (V2)</option>
+                    <option key="SM2013_7uker_flere_perioder" value="SM2013_7uker_flere_perioder">SM2013_7uker_flere_perioder (V2)</option>
+                    <option key="SM2013_alle_felter" value="SM2013_alle_felter">SM2013_alle_felter (V2)</option>
+                    <option key="SM2013_Påfølgende_17uker" value="SM2013_Påfølgende_17uker">SM2013_Påfølgende_17uker (V2)</option>
+                    <option key="SM2013_Påfølgende_39uker" value="SM2013_Påfølgende_39uker">SM2013_Påfølgende_39uker (V2)</option>
+                    <option key="SM2013_Påfølgende_39uker_med_AAP" value="SM2013_Påfølgende_39uker_med_AAP">SM2013_Påfølgende_39uker_med_AAP (V2)</option>
+                </Select>
+                <Checkbox
+                    label="Manglende tilrettelegging på arbeidsplassen"
+                    name="manglendeTilretteleggingPaaArbeidsplassen"
+                    key="manglendeTilretteleggingPaaArbeidsplassen"
+                    onClick={handleManglendeTilretteleggingPaaArbeidsplassen}
+                    defaultChecked={manglendeTilretteleggingPaaArbeidsplassen}
+                />
+            </React.Fragment>}
+            <div
+                className="float--right skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
+            <Knapp className="blokk-xs" onClick={addPeriode}>Legg til periode</Knapp>
+            {perioder.map((periode, idx) => (
+                <SkjemaGruppe key={"periode" + (idx + 1)} className="panel panel--border blokk-xs">
+                    {idx > 0 ? <Lukknapp className="periodeknapp" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
+                        periode</Lukknapp> : <React.Fragment/>}
+                    <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
+                    <div className="periodepanel">
+                        <Input label="Fra"
+                               name={"fom" + (idx + 1)}
+                               key={"fom" + (idx + 1)}
+                               className="float--left"
+                               value={periode.fom}
+                               onChange={handlePeriodeChange}
+                        />
+                        <Input label="Til"
+                               name={"tom" + (idx + 1)}
+                               key={"tom" + (idx + 1)}
+                               className="float--right"
+                               value={periode.tom}
+                               onChange={handlePeriodeChange}
                         />
                     </div>
-                    {legefnrInput}
-                    <Select label="Sykmeldingstype"
-                            value={smtype}
-                            name="smtype"
-                            key="smtype"
-                            onChange={e => setSmtype(e.target.value)}
+                    <Select label="Type"
+                            name={"type" + (idx + 1)}
+                            key={"type" + (idx + 1)}
+                            selected={periode.type}
+                            onChange={handlePeriodeChange}
+                            className="egenstaende"
                     >
-                        <option key="SM2013" value="SM2013">SM2013 (V1)</option>
-                        <option key="SM2013_diagnoseogfraværsgrunn" value="SM2013_diagnoseogfraværsgrunn">SM2013_diagnoseogfraværsgrunn</option>
-                        <option key="SM2013_forenklet" value="SM2013_forenklet">SM2013_forenklet</option>
-                        <option key="SM2013_NAV_Arbeidsgiver_Melding" value="SM2013_NAV_Arbeidsgiver_Melding">SM2013_NAV_Arbeidsgiver_Melding</option>
-                        <option key="SM2013_normal" value="SM2013_normal">SM2013_normal</option>
-                        <option key="SM2013_uten_arbeidsgiver" value="SM2013_uten_arbeidsgiver">SM2013_uten_arbeidsgiver</option>
-                        <option key="SM2013_7uker" value="SM2013_7uker">SM2013_7uker (V2)</option>
-                        <option key="SM2013_7uker_flere_perioder" value="SM2013_7uker_flere_perioder">SM2013_7uker_flere_perioder (V2)</option>
-                        <option key="SM2013_alle_felter" value="SM2013_alle_felter">SM2013_alle_felter (V2)</option>
-                        <option key="SM2013_Påfølgende_17uker" value="SM2013_Påfølgende_17uker">SM2013_Påfølgende_17uker (V2)</option>
-                        <option key="SM2013_Påfølgende_39uker" value="SM2013_Påfølgende_39uker">SM2013_Påfølgende_39uker (V2)</option>
-                        <option key="SM2013_Påfølgende_39uker_med_AAP" value="SM2013_Påfølgende_39uker_med_AAP">SM2013_Påfølgende_39uker_med_AAP (V2)</option>
+                        <option key='HUNDREPROSENT' value='HUNDREPROSENT'>100%</option>
+                        <option key='GRADERT_20' value='GRADERT_20'>20% gradert</option>
+                        <option key='GRADERT_40' value='GRADERT_40'>40% gradert</option>
+                        <option key='GRADERT_50' value='GRADERT_50'>50% gradert</option>
+                        <option key='GRADERT_60' value='GRADERT_60'>60% gradert</option>
+                        <option key='GRADERT_80' value='GRADERT_80'>80% gradert</option>
+                        <option key='AVVENTENDE' value='AVVENTENDE'>Avventende</option>
+                        <option key='GRADERT_REISETILSKUDD' value='GRADERT_REISETILSKUDD'>Gradert reisetilskudd</option>
+                        <option key='REISETILSKUDD' value='REISETILSKUDD'>Reisetilskudd</option>
+                        <option key='BEHANDLINGSDAGER' value='BEHANDLINGSDAGER'>4 behandlingsdager</option>
+                        <option key='BEHANDLINGSDAG' value='BEHANDLINGSDAG'>1 behandlingsdag</option>
                     </Select>
-                    <Checkbox
-                        label="Manglende tilrettelegging på arbeidsplassen"
-                        name="manglendeTilretteleggingPaaArbeidsplassen"
-                        key="manglendeTilretteleggingPaaArbeidsplassen"
-                        onClick={handleManglendeTilretteleggingPaaArbeidsplassen}
-                        defaultChecked={manglendeTilretteleggingPaaArbeidsplassen}
-                    />
-                </React.Fragment>}
-                <div
-                    className="float--right skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
-                <Knapp className="blokk-xs" onClick={addPeriode}>Legg til periode</Knapp>
-                {perioder.map((periode, idx) => (
-                    <SkjemaGruppe key={"periode" + (idx + 1)} className="panel panel--border blokk-xs">
-                        {idx > 0 ? <Lukknapp className="periodeknapp" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
-                            periode</Lukknapp> : <React.Fragment/>}
-                        <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
-                        <div className="periodepanel">
-                            <Input label="Fra"
-                                   name={"fom" + (idx + 1)}
-                                   key={"fom" + (idx + 1)}
-                                   className="float--left"
-                                   value={periode.fom}
-                                   onChange={handlePeriodeChange}
-                            />
-                            <Input label="Til"
-                                   name={"tom" + (idx + 1)}
-                                   key={"tom" + (idx + 1)}
-                                   className="float--right"
-                                   value={periode.tom}
-                                   onChange={handlePeriodeChange}
-                            />
-                        </div>
-                        <Select label="Type"
-                                name={"type" + (idx + 1)}
-                                key={"type" + (idx + 1)}
-                                selected={periode.type}
-                                onChange={handlePeriodeChange}
-                                className="egenstaende"
-                        >
-                            <option key='HUNDREPROSENT' value='HUNDREPROSENT'>100%</option>
-                            <option key='GRADERT_20' value='GRADERT_20'>20% gradert</option>
-                            <option key='GRADERT_40' value='GRADERT_40'>40% gradert</option>
-                            <option key='GRADERT_50' value='GRADERT_50'>50% gradert</option>
-                            <option key='GRADERT_60' value='GRADERT_60'>60% gradert</option>
-                            <option key='GRADERT_80' value='GRADERT_80'>80% gradert</option>
-                            <option key='AVVENTENDE' value='AVVENTENDE'>Avventende</option>
-                            <option key='GRADERT_REISETILSKUDD' value='GRADERT_REISETILSKUDD'>Gradert reisetilskudd</option>
-                            <option key='REISETILSKUDD' value='REISETILSKUDD'>Reisetilskudd</option>
-                            <option key='BEHANDLINGSDAGER' value='BEHANDLINGSDAGER'>4 behandlingsdager</option>
-                            <option key='BEHANDLINGSDAG' value='BEHANDLINGSDAG'>1 behandlingsdag</option>
-                        </Select>
-                    </SkjemaGruppe>
-                ))}
-                {!simple &&
-                <React.Fragment>
-                    {kontaktdatoInput}
-                    {begrunnikkekontaktInput}
-                </React.Fragment>
-                }
-                <Hovedknapp className='blokk-xs'>Send sykmelding</Hovedknapp>
-            </form>
-            {isLoaded ?
-                error === '' ?
-                    <AlertStripeInfo>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeInfo>
-                    : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
-        </React.Fragment>
-    );
+                </SkjemaGruppe>
+            ))}
+            {!simple &&
+            <React.Fragment>
+                {kontaktdatoInput}
+                {begrunnikkekontaktInput}
+            </React.Fragment>
+            }
+            <Hovedknapp className='blokk-xs'>Send sykmelding</Hovedknapp>
+        </form>
+        {isLoaded ?
+            error === '' ?
+                <AlertStripeInfo>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeInfo>
+                : <AlertStripeFeil>{error}</AlertStripeFeil>
+            : <React.Fragment/>}
+    </React.Fragment>;
 }

@@ -1,25 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
+import {useJSONGet} from "../hooks";
 
 export default function Testbrukere() {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState("");
-    const [error, setError] = useState("");
+    const [get, isLoaded, returverdi, error] = useJSONGet();
 
     useEffect(() => {
-        fetch(API_URL + "/testbrukere")
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-            });
+        get(API_URL + "/testbrukere");
     });
 
     return (

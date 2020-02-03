@@ -1,26 +1,27 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
+import {Undertekst, Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
 import {useGet, useInput} from "../hooks";
 
-export default function FinnSykmeldingFraMottakId() {
-    const [mottakId, mottakIdInput] = useInput({label: "Mottaks-ID"});
+export default function SlettOppfolgingsdialog() {
+    const [id, idInput] = useInput({label: "Oppfølgingsdialog-ID"});
     const [get, isLoaded, returverdi, error] = useGet();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        get(API_URL + "/sykmelding?mottakid=" + mottakId);
+        get(API_URL + "/slettoppfolgingsdialog?oppfolgingsdialogId=" + id)
     };
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.FINN_SYKMELDING_FRA_MOTTAKID}</Undertittel>
+            <Undertittel>{Sider.SLETT_OPPFOLGINGSDIALOG}</Undertittel>
+            <Undertekst>Oppfølgingsdialog-ID er tallet du finner etter /oppfolgingsplaner/ i URLen til oppfølgingsdialogen</Undertekst>
             <form onSubmit={handleSubmit}>
-                {mottakIdInput}
-                <Hovedknapp className='blokk-xs'>Finn sykmelding</Hovedknapp>
+                {idInput}
+                <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
             { isLoaded ?
                 error === '' ? <code>{returverdi}</code>

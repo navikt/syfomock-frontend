@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import AlertStripe, {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
 import {API_URL} from "../App";
 import {useInput, useLocalStorageInput} from "../hooks";
@@ -18,7 +18,7 @@ export default function Aktivitetskrav() {
         let url = new URL(API_URL + "/aktivitetskrav");
         let params = {brukerFnr: fnr, sykmeldingDok};
         url.search = new URLSearchParams(params).toString()
-        fetch(url)
+        fetch(url.toString())
             .then(res => res.text())
             .then(res => {
                 setIsLoaded(true);

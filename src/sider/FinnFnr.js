@@ -1,29 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import AlertStripe from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
 import {API_URL} from "../App";
-import {useLocalStorageInput} from "../hooks";
+import {useGet, useLocalStorageInput} from "../hooks";
 
 export default function FinnFnr() {
     const [aktorId, aktorIdInput] = useLocalStorageInput({label: "Aktør-ID", key: "aktorid"});
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState("");
-    const [error, setError] = useState("");
+    const [get, isLoaded, returverdi, error] = useGet();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch(API_URL + "/hentFnrByAktoerId/" + aktorId)
-            .then(res => res.text())
-            .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-            });
+        get(API_URL + "/hentFnrByAktoerId/" + aktorId);
     };
 
     return (

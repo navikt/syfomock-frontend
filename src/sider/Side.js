@@ -15,6 +15,7 @@ import SlettDialogmoter from "./SlettDialogmoter";
 import SlettMotebehov from "./SlettMotebehov";
 import NullstillMotebehov from "./NullstillMotebehov";
 import SlettVeilederoppgaver from "./SlettVeilederoppgaver";
+import SlettOppfolgingsdialog from "./SlettOppfolgingsdialog";
 
 const Unimplemented = ({ side }) => <code class="sentrert">unimplemented!({side})</code>;
 
@@ -62,7 +63,7 @@ export const komponentForSide = (side) => {
         case Sider.SLETT_MOTEBEHOV: return <SlettMotebehov />;
         case Sider.NULLSTILL_MOTEBEHOV: return <NullstillMotebehov />;
         case Sider.SLETT_VEILEDEROPPGAVER: return <SlettVeilederoppgaver />;
-        case Sider.SLETT_OPPFOLGINGSDIALOG: return <Unimplemented side={side} />;
+        case Sider.SLETT_OPPFOLGINGSDIALOG: return <SlettOppfolgingsdialog />;
         case Sider.NULLSTILL_OPPFOLGINGSDIALOG: return <Unimplemented side={side} />;
         case Sider.ENDRE_OPPFOLGINGSDIALOG: return <Unimplemented side={side} />;
         case Sider.PLANLAGT_VARSEL: return <Unimplemented side={side} />;
