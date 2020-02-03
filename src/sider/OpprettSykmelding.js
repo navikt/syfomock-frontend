@@ -9,7 +9,7 @@ import Lukknapp from "nav-frontend-lukknapp";
 import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
 import {useFormPost, useInput, useLocalStorage, useLocalStorageInput} from "../hooks";
-import {Sider} from "../Meny";
+import {Sider} from "../sider";
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

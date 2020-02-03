@@ -4,9 +4,9 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Meny, {Sider} from "./Meny";
+import Meny from "./Meny";
 import {Sidetittel} from "nav-frontend-typografi";
-import {komponentForSide, urlForSide} from "./sider/Side";
+import {komponentForSide, urlForSide, Sider} from "./sider";
 
 export const API_URL = "https://syfomockproxy-q.nav.no";
 

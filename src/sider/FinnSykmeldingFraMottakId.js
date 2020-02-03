@@ -3,7 +3,7 @@ import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
-import {Sider} from "../Meny";
+import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
 
 export default function FinnSykmeldingFraMottakId() {

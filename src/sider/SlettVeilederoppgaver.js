@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
-import {Sider} from "../Meny";
+import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useLocalStorageInput} from "../hooks";
 import {Select} from "nav-frontend-skjema";

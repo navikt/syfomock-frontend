@@ -6,7 +6,7 @@ import {API_URL} from "../App";
 import moment from "moment";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {useGet, useInput, useLocalStorageInput} from "../hooks";
-import {Sider} from "../Meny";
+import {Sider} from "../sider";
 
 export default function RegistrerNaermesteLeder() {
     const [brukerFnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});

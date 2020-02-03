@@ -33,15 +33,15 @@ export function useGet() {
 
 export function useJSONGet() {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState({});
+    const [returverdi, setReturverdi] = useState([]);
     const [error, setError] = useState('');
 
     const get = (url) => {
         fetch(url)
             .then(res => res.json())
-            .then(res => {
+            .then((data) => {
                 setIsLoaded(true);
-                setReturverdi(res);
+                setReturverdi(data.map(o => o.fnr));
                 setError("");
             })
             .catch(error => {

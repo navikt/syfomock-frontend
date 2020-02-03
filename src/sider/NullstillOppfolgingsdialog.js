@@ -1,24 +1,23 @@
 import React from 'react';
-import {Undertekst, Undertittel} from "nav-frontend-typografi";
+import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
-import {useGet, useLocalStorageInput} from "../hooks";
+import {API_URL} from "../App";
+import {useGet, useInput} from "../hooks";
 
-export default function NullstillNarmesteLeder() {
-    const [fnr, fnrInput] = useLocalStorageInput({label: "Sykmeldtes fødselsnummer", key: "fnr"});
+export default function NullstillOppfolgingsdialog() {
+    const [fnr, fnrInput] = useInput({label: "Oppfølgingsdialog-ID"});
     const [get, isLoaded, returverdi, error] = useGet();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        get(API_URL + "/nullstill-nl/" + fnr);
+        get(API_URL + "/slettoppfolgingsdialog/person?fnr=" + fnr);
     };
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.NULLSTILL_NAERMESTELEDER}</Undertittel>
-            <Undertekst className="blokk-xs">Dette fjerner alle ledere knyttet til brukeren, samt tilhørende hendelser</Undertekst>
+            <Undertittel>{Sider.NULLSTILL_OPPFOLGINGSDIALOG}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>

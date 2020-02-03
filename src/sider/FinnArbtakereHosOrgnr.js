@@ -4,7 +4,7 @@ import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {useGet, useLocalStorageInput} from "../hooks";
-import {Sider} from "../Meny";
+import {Sider} from "../sider";
 
 export default function FinnArbtakereHosOrgnr() {
     const [orgnr, input] = useLocalStorageInput({label: "Organisasjonsnummer", key: "orgnr"});
