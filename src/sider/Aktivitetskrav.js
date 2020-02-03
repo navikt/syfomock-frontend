@@ -1,20 +1,24 @@
 import React, {useState} from 'react';
-import {Undertekst, Undertittel} from "nav-frontend-typografi";
+import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import {API_URL} from "../App";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import AlertStripe, {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
-import {useLocalStorageInput} from "../hooks";
+import {API_URL} from "../App";
+import {useInput, useLocalStorageInput} from "../hooks";
 
-export default function NullstillSykmeldt() {
+export default function Aktivitetskrav() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
+    const [sykmeldingDok, sykmeldingDokInput] = useInput({label: "Sykmeldingsdokument"});
     const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState('');
-    const [error, setError] = useState('');
+    const [returverdi, setReturverdi] = useState("");
+    const [error, setError] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch(API_URL + "/nullstill/" + fnr)
+        let url = new URL(API_URL + "/aktivitetskrav");
+        let params = {brukerFnr: fnr, sykmeldingDok};
+        url.search = new URLSearchParams(params).toString()
+        fetch(url)
             .then(res => res.text())
             .then(res => {
                 setIsLoaded(true);
@@ -22,17 +26,17 @@ export default function NullstillSykmeldt() {
             })
             .catch(error => {
                 setIsLoaded(true);
-                setError(error.toString())
+                setError(error.toString());
             });
     };
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.NULLSTILL_SYKMELDT}</Undertittel>
-            <Undertekst className="blokk-xs">Dette fjerner alle sykmeldinger fra brukeren, samt tilhørende søknader, hendelser og varsler</Undertekst>
+            <Undertittel>{Sider.AKTIVITETSKRAV}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
-                <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
+                {sykmeldingDokInput}
+                <Hovedknapp className='blokk-xs'>Hent</Hovedknapp>
             </form>
             { isLoaded ?
                 error === '' ? <code>{returverdi}</code>

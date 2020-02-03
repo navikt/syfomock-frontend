@@ -4,17 +4,17 @@ import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../Meny";
-import {useLocalStorageInput} from "../hooks";
+import {useInput} from "../hooks";
 
-export default function NullstillSykmeldt() {
-    const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
+export default function SlettMotebehov() {
+    const [uuid, uuidInput] = useInput({label: "Møtebehov-UUID"});
     const [isLoaded, setIsLoaded] = useState(false);
     const [returverdi, setReturverdi] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch(API_URL + "/nullstill/" + fnr)
+        fetch(API_URL + "/motebehov/slett?motebehovUuid=" + uuid)
             .then(res => res.text())
             .then(res => {
                 setIsLoaded(true);
@@ -28,11 +28,11 @@ export default function NullstillSykmeldt() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.NULLSTILL_SYKMELDT}</Undertittel>
-            <Undertekst className="blokk-xs">Dette fjerner alle sykmeldinger fra brukeren, samt tilhørende søknader, hendelser og varsler</Undertekst>
+            <Undertittel>{Sider.SLETT_MOTEBEHOV}</Undertittel>
+            <Undertekst>Spør en utvikler eller se på innhold i response fra syfomotebehov i Network-fanen i Chrome</Undertekst>
             <form onSubmit={handleSubmit}>
-                {fnrInput}
-                <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
+                {uuidInput}
+                <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
             { isLoaded ?
                 error === '' ? <code>{returverdi}</code>

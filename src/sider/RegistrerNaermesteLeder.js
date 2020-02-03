@@ -58,7 +58,7 @@ export default function RegistrerNaermesteLeder() {
                     onClick={handleCheck}
                     defaultChecked={agForskutterer}
                 />
-                <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
+                <Hovedknapp className='blokk-xs'>Registrer</Hovedknapp>
             </form>
             {isLoaded ?
                 error === '' ? <code>{returverdi}</code>
