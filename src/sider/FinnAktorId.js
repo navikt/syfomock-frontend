@@ -1,7 +1,7 @@
 import React from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import AlertStripe from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useLocalStorageInput} from "../hooks";
@@ -17,7 +17,7 @@ export default function FinnAktorId() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.FINN_AKTORID}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.FINN_AKTORID.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Hent aktør-ID</Hovedknapp>
@@ -25,9 +25,9 @@ export default function FinnAktorId() {
             {isLoaded ?
                 !returverdi.match(/^[0-9]+$/)
                     ? error === ''
-                    ? <AlertStripe type="feil">{returverdi} :(</AlertStripe>
-                    : <AlertStripe type="feil">{error}</AlertStripe>
-                    : <AlertStripe type="suksess">Aktør-ID: {returverdi}</AlertStripe>
+                    ? <AlertStripeFeil>{returverdi} :(</AlertStripeFeil>
+                    : <AlertStripeFeil>{error}</AlertStripeFeil>
+                    : <AlertStripeSuksess>Aktør-ID: {returverdi}</AlertStripeSuksess>
                 : <React.Fragment/>}
         </React.Fragment>
     );

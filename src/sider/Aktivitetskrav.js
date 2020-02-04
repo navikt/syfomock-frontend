@@ -15,13 +15,13 @@ export default function Aktivitetskrav() {
         event.preventDefault();
         let url = new URL(API_URL + "/aktivitetskrav");
         let params = {brukerFnr: fnr, sykmeldingDok};
-        url.search = new URLSearchParams(params).toString()
+        url.search = new URLSearchParams(params).toString();
         get(url.toString());
     };
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.AKTIVITETSKRAV}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.AKTIVITETSKRAV.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 {sykmeldingDokInput}

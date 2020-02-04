@@ -32,7 +32,7 @@ export default function Testbrukere() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.TESTBRUKERE_STATUS}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.TESTBRUKERE_STATUS.tittel}</Undertittel>
             <p>Funker dårlig :)</p>
 
             {isLoaded ?

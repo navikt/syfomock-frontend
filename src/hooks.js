@@ -8,6 +8,14 @@ export function useInput({ label, initialState="" }) {
     return [value, input, setValue];
 }
 
+function fetchStatusHandler(response) {
+    if (response.status === 200) {
+        return response;
+    } else {
+        throw new Error(response.statusText);
+    }
+}
+
 export function useGet() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [returverdi, setReturverdi] = useState('');
@@ -15,6 +23,7 @@ export function useGet() {
 
     const get = (url) => {
         fetch(url)
+            .then(fetchStatusHandler)
             .then(res => res.text())
             .then(res => {
                 setIsLoaded(true);
@@ -38,6 +47,7 @@ export function useJSONGet() {
 
     const get = (url) => {
         fetch(url)
+            .then(fetchStatusHandler)
             .then(res => res.json())
             .then((data) => {
                 setIsLoaded(true);
@@ -64,14 +74,17 @@ export function useFormPost() {
             method: "POST",
             body: formdata
         })
+            .then(fetchStatusHandler)
             .then(res => res.text())
             .then(res => {
                 setIsLoaded(true);
                 setReturverdi(res);
+                setError("");
             })
             .catch(error => {
                 setIsLoaded(true);
                 setError(error.toString());
+                setReturverdi("");
             });
     };
 

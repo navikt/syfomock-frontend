@@ -1,8 +1,8 @@
 import React from 'react';
-import {Undertekst, Undertittel} from "nav-frontend-typografi";
+import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
 
@@ -17,14 +17,14 @@ export default function SlettMotebehov() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.SLETT_MOTEBEHOV}</Undertittel>
-            <Undertekst>Spør en utvikler eller se på innhold i response fra syfomotebehov i Network-fanen i Chrome</Undertekst>
+            <Undertittel className='blokk-xs'>{Sider.SLETT_MOTEBEHOV.tittel}</Undertittel>
+            <AlertStripeInfo className='blokk-xs'>Spør en utvikler eller se på innhold i response fra syfomotebehov i Network-fanen i Chrome</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {uuidInput}
                 <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
             { isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>

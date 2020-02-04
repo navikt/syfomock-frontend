@@ -4,7 +4,7 @@ import {Checkbox} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import moment from "moment";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {useGet, useInput, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
 
@@ -32,7 +32,7 @@ export default function RegistrerNaermesteLeder() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.REGISTRER_NAERMESTELEDER}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.REGISTRER_NAERMESTELEDER.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 {lederFnrInput}
@@ -50,7 +50,7 @@ export default function RegistrerNaermesteLeder() {
                 <Hovedknapp className='blokk-xs'>Registrer</Hovedknapp>
             </form>
             {isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment/>}
         </React.Fragment>

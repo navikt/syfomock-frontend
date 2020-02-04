@@ -1,8 +1,8 @@
 import React from 'react';
-import {Undertekst, Undertittel} from "nav-frontend-typografi";
+import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
 
@@ -17,14 +17,14 @@ export default function NullstillMote() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.NULLSTILL_MOTEDELTAGER}</Undertittel>
-            <Undertekst className="blokk-xs">Du må se i møte-appen for arbeidsgivere og hente ut den lange strengen i slutten av URL'en. Sett denne inn i skjemaet under</Undertekst>
+            <Undertittel className='blokk-xs'>{Sider.NULLSTILL_MOTEDELTAGER.tittel}</Undertittel>
+            <AlertStripeInfo className="blokk-xs">Du må se i møte-appen for arbeidsgivere og hente ut den lange strengen i slutten av URL'en. Sett denne inn i skjemaet under</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {uuidInput}
                 <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
             </form>
             { isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>

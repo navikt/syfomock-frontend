@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {Undertekst, Undertittel} from "nav-frontend-typografi";
+import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
 import SelectSearch from "react-select-search";
@@ -25,8 +25,8 @@ export default function SettSykmeldingsstatus() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.SETT_SYKMELDINGSSTATUS}</Undertittel>
-            <Undertekst className="blokk-xs">Sykmelding-ID er ID'en som er på slutten av URL'en om du går på sykefravær som en sluttbruker og inn på en spesifikk sykmelding</Undertekst>
+            <Undertittel className='blokk-xs'>{Sider.SETT_SYKMELDINGSSTATUS.tittel}</Undertittel>
+            <AlertStripeInfo className="blokk-xs">Sykmelding-ID er ID'en som er på slutten av URL'en om du går på sykefravær som en sluttbruker og inn på en spesifikk sykmelding</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {uuidInput}
                 <div className="skjemaelement">
@@ -41,7 +41,7 @@ export default function SettSykmeldingsstatus() {
                 <Hovedknapp className='blokk-xs'>Sett status</Hovedknapp>
             </form>
             { isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>

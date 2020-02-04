@@ -2,7 +2,7 @@ import React  from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {useGet, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
 
@@ -20,14 +20,14 @@ export default function FinnArbtakereHosOrgnr() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.FINN_ARBTAKERE_HOS_ORGNR}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.FINN_ARBTAKERE_HOS_ORGNR.tittel}</Undertittel>
             <form onSubmit={e => handleSubmit(e)}>
                 {input}
                 <Hovedknapp className='blokk-xs'>Finn arbeidstakere</Hovedknapp>
             </form>
             { isLoaded ?
                 error === '' ?
-                    <code>{returverdi}</code> :
+                    <AlertStripeSuksess>{returverdi}</AlertStripeSuksess> :
                     <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>

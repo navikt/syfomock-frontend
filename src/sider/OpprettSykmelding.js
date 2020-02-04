@@ -4,7 +4,7 @@ import {Undertittel} from "nav-frontend-typografi";
 import {Checkbox, Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
-import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
 import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
@@ -121,7 +121,6 @@ export default function OpprettSykmelding() {
         let idato = identdato;
         let udato = utstedelsesdato;
 
-        let data = new URLSearchParams();
         if (simple) {
             let tidligsteDag = finnTidligsteDag(perioder);
             sdato = tidligsteDag;
@@ -129,16 +128,20 @@ export default function OpprettSykmelding() {
             udato = tidligsteDag;
 
         }
-        data.append("fnr", fnr);
-        data.append("eid", eid);
-        data.append("syketilfelleStartDato", sdato);
-        data.append("identdato", idato);
-        data.append("utstedelsesdato", udato);
-        data.append("msgid", msgid);
-        data.append("diagnosekode", diagnosekode);
-        data.append("legefnr", legefnr);
-        data.append("smtype", smtype);
-        data.append("manglendeTilretteleggingPaaArbeidsplassen", manglendeTilretteleggingPaaArbeidsplassen.toString());
+        let data = new URLSearchParams({
+            fnr,
+            eid,
+            syketilfelleStartDato: sdato,
+            identdato: idato,
+            utstedelsesdato: udato,
+            msgid,
+            diagnosekode,
+            legefnr,
+            smtype,
+            manglendeTilretteleggingPaaArbeidsplassen,
+            kontaktdato,
+            begrunnikkekontakt
+        });
         for (let i = 0; i < perioder.length; i++) {
             let idx = i + 1;
             data.append("fom" + idx, perioder[i].fom);
@@ -150,13 +153,11 @@ export default function OpprettSykmelding() {
                 setError("Fra-verdi er etter Til-verdi i periode " + idx);
             }
         }
-        data.append("kontaktdato", kontaktdato);
-        data.append("begrunnikkekontakt", begrunnikkekontakt);
         post(API_URL + "/nyttmottak/sykmelding/opprett/", data);
     };
 
     return <React.Fragment>
-        <Undertittel>{Sider.OPPRETT_SYKMELDING}</Undertittel>
+        <Undertittel>{Sider.OPPRETT_SYKMELDING.tittel}</Undertittel>
         <Checkbox
             label="Simple mode"
             name="simple"
@@ -271,7 +272,7 @@ export default function OpprettSykmelding() {
         </form>
         {isLoaded ?
             error === '' ?
-                <AlertStripeInfo>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeInfo>
+                <AlertStripeSuksess>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeSuksess>
                 : <AlertStripeFeil>{error}</AlertStripeFeil>
             : <React.Fragment/>}
     </React.Fragment>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useInput} from "../hooks";
@@ -17,13 +17,13 @@ export default function NullstillOppfolgingsdialog() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.NULLSTILL_OPPFOLGINGSDIALOG}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.NULLSTILL_OPPFOLGINGSDIALOG.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
             </form>
             { isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useLocalStorageInput} from "../hooks";
@@ -20,7 +20,7 @@ export default function SlettVeilederoppgaver() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.SLETT_VEILEDEROPPGAVER}</Undertittel>
+            <Undertittel className='blokk-xs'>{Sider.SLETT_VEILEDEROPPGAVER.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Select label="Oppgavetype"
@@ -35,7 +35,7 @@ export default function SlettVeilederoppgaver() {
                 <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
             { isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>

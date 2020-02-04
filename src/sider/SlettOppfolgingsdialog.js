@@ -1,8 +1,8 @@
 import React from 'react';
-import {Undertekst, Undertittel} from "nav-frontend-typografi";
+import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
 
@@ -17,14 +17,14 @@ export default function SlettOppfolgingsdialog() {
 
     return (
         <React.Fragment>
-            <Undertittel>{Sider.SLETT_OPPFOLGINGSDIALOG}</Undertittel>
-            <Undertekst>Oppfølgingsdialog-ID er tallet du finner etter /oppfolgingsplaner/ i URLen til oppfølgingsdialogen</Undertekst>
+            <Undertittel className='blokk-xs'>{Sider.SLETT_OPPFOLGINGSDIALOG.tittel}</Undertittel>
+            <AlertStripeInfo className='blokk-xs'>Oppfølgingsdialog-ID er tallet du finner etter /oppfolgingsplaner/ i URLen til oppfølgingsdialogen</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {idInput}
                 <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
             { isLoaded ?
-                error === '' ? <code>{returverdi}</code>
+                error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
         </React.Fragment>
