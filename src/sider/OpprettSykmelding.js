@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import moment from 'moment';
-import {Undertittel} from "nav-frontend-typografi";
+import {Undertekst, Undertittel} from "nav-frontend-typografi";
 import {Checkbox, Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
@@ -183,12 +183,17 @@ export default function OpprettSykmelding() {
                 {identdatoInput}
                 {utstedelsesdatoInput}
                 <div className="skjemaelement">
-                    <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
+                    <div className="flex-container">
+                        <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
+                        <Undertekst className="flex--end">Skriv "tullekode" for å få en kode som vil bli avslått i systemet!</Undertekst>
+                    </div>
                     <SelectSearch options={Object.keys(Diagnoser).map(diagnose => ({name: `${Diagnoser[diagnose]} (${diagnose})`, value: diagnose}))}
                                   value={diagnosekode}
                                   name="diagnosekode"
                                   key="diagnosekode"
-                                  onChange={e => setDiagnosekode(e.value)}
+                                  onChange={e => {
+                                      setDiagnosekode(e.value)
+                                  }}
                     />
                 </div>
                 {legefnrInput}
@@ -220,7 +225,7 @@ export default function OpprettSykmelding() {
                 />
             </React.Fragment>}
             <div className="flex-container">
-                <Knapp className="blokk-xs" onClick={addPeriode}>Legg til periode</Knapp>
+                <Knapp className="blokk-xs" htmlType="button" onClick={addPeriode}>Legg til periode</Knapp>
                 <div className="flex--end skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
             </div>
             {perioder.map((periode, idx) => (
@@ -273,7 +278,7 @@ export default function OpprettSykmelding() {
                 {begrunnikkekontaktInput}
             </React.Fragment>
             }
-            <Hovedknapp className='blokk-xs'>Send sykmelding</Hovedknapp>
+            <Hovedknapp htmlType="button" onClick={handleSubmit} className='blokk-xs'>Send sykmelding</Hovedknapp>
         </form>
         {isLoaded ?
             error === '' ?

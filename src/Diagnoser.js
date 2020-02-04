@@ -686,5 +686,6 @@ export const Diagnoser = {
     Z25: "Problem vold/traumatisk hendelse",
     Z27: "Engstelig for sosialt problem",
     Z28: "Redusert funksjonsevne sosialt probl",
-    Z29: "Sosialt problem IKA"
+    Z29: "Sosialt problem IKA",
+    tullekode: "Tullekode!"
 };

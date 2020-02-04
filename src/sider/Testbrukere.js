@@ -1,28 +1,63 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
-import {useJSONGet} from "../hooks";
+import {fetchStatusHandler} from "../hooks";
+
+const useGetTestbrukere = () => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [testbrukere, setTestbrukere] = useState([]);
+    const [error, setError] = useState('');
+
+    const get = () => {
+        fetch(API_URL + "/testbrukere")
+            .then(fetchStatusHandler)
+            .then(res => res.json())
+            .then((data) => {
+                setIsLoaded(true);
+                setTestbrukere(data.map(o => ({fnr: o.fnr, aktoerId: ""})));
+                setError("");
+            })
+            .catch(error => {
+                setIsLoaded(true);
+                setError(error.toString());
+                setTestbrukere("");
+            });
+    };
+
+    return [get, isLoaded, testbrukere, error];
+};
 
 export default function Testbrukere() {
-    const [get, isLoaded, returverdi, error] = useJSONGet();
+    const [getTestbrukere, testbrukereLoaded, testbrukere, testbrukereError] = useGetTestbrukere();
 
     useEffect(() => {
-        get(API_URL + "/testbrukere");
-    }, []);
+        getTestbrukere();
+        if (testbrukereLoaded) {
+            for (let i = 0; i < testbrukere.length; i++) {
+                fetch(API_URL + "/hentAktoerIdByFnr/" + testbrukere[i].fnr)
+                    .then(fetchStatusHandler)
+                    .then(res => res.text())
+                    .then(res => {
+                        testbrukere[i].aktoerId = res;
+                    });
+            }
+        }
+    });
 
     const renderTabell = () => {
         return (
             <table className="tabell tabell--stripet">
                 <thead>
                     <th>Fødselsnummer</th>
-                    <th>Hallo</th>
+                    <th>AktørID</th>
                 </thead>
                 <tbody>
-                {returverdi.map(fnr =>
+                {testbrukere.map(bruker =>
                         <tr>
-                            <td>{fnr}</td>
+                            <td>{bruker.fnr}</td>
+                            <td>{bruker.aktoerId}</td>
                         </tr>)
                 }
                 </tbody>
@@ -35,9 +70,9 @@ export default function Testbrukere() {
             <Undertittel className='blokk-xs'>{Sider.TESTBRUKERE_STATUS.tittel}</Undertittel>
             <p>Funker dårlig :)</p>
 
-            {isLoaded ?
-                error === '' ? renderTabell()
-                    : <AlertStripeFeil>{error}</AlertStripeFeil>
+            {testbrukereLoaded ?
+                testbrukereError === '' ? renderTabell()
+                    : <AlertStripeFeil>{testbrukereError}</AlertStripeFeil>
                 : <React.Fragment/>}
         </React.Fragment>
     );

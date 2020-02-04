@@ -8,7 +8,7 @@ export function useInput({ label, initialState="" }) {
     return [value, input, setValue];
 }
 
-function fetchStatusHandler(response) {
+export function fetchStatusHandler(response) {
     if (response.status === 200) {
         return response;
     } else {
@@ -28,30 +28,6 @@ export function useGet() {
             .then(res => {
                 setIsLoaded(true);
                 setReturverdi(res);
-                setError("");
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-                setReturverdi("");
-            });
-    };
-
-    return [get, isLoaded, returverdi, error];
-}
-
-export function useJSONGet() {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [returverdi, setReturverdi] = useState([]);
-    const [error, setError] = useState('');
-
-    const get = (url) => {
-        fetch(url)
-            .then(fetchStatusHandler)
-            .then(res => res.json())
-            .then((data) => {
-                setIsLoaded(true);
-                setReturverdi(data.map(o => o.fnr));
                 setError("");
             })
             .catch(error => {

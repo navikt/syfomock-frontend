@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
