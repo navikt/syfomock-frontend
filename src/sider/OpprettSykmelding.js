@@ -157,15 +157,17 @@ export default function OpprettSykmelding() {
     };
 
     return <React.Fragment>
+        <div className="flex-container">
         <Undertittel>{Sider.OPPRETT_SYKMELDING.tittel}</Undertittel>
         <Checkbox
             label="Simple mode"
             name="simple"
             key="simple"
-            className="flex--right"
+            className="flex--end"
             onChange={handleSimple}
             defaultChecked={simple}
         />
+        </div>
         {simple &&
         <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}
         {!simple && moment(finnTidligsteDag(perioder)) < moment(syketilfelleStartDato) && begrunnikkekontakt === ''
@@ -217,26 +219,29 @@ export default function OpprettSykmelding() {
                     defaultChecked={manglendeTilretteleggingPaaArbeidsplassen}
                 />
             </React.Fragment>}
-            <div
-                className="float--right skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
-            <Knapp className="blokk-xs" onClick={addPeriode}>Legg til periode</Knapp>
+            <div className="flex-container">
+                <Knapp className="blokk-xs" onClick={addPeriode}>Legg til periode</Knapp>
+                <div className="flex--end skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
+            </div>
             {perioder.map((periode, idx) => (
                 <SkjemaGruppe key={"periode" + (idx + 1)} className="panel panel--border blokk-xs">
-                    {idx > 0 ? <Lukknapp className="periodeknapp" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
-                        periode</Lukknapp> : <React.Fragment/>}
-                    <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
-                    <div className="periodepanel">
+                    <div className="flex-container">
+                        <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
+                        {idx > 0 ? <Lukknapp className="flex--end" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
+                            periode</Lukknapp> : <React.Fragment/>}
+                    </div>
+                    <div className="flex-container">
                         <Input label="Fra"
                                name={"fom" + (idx + 1)}
                                key={"fom" + (idx + 1)}
-                               className="float--left"
+
                                value={periode.fom}
                                onChange={handlePeriodeChange}
                         />
                         <Input label="Til"
                                name={"tom" + (idx + 1)}
                                key={"tom" + (idx + 1)}
-                               className="float--right"
+                               className="flex--end"
                                value={periode.tom}
                                onChange={handlePeriodeChange}
                         />

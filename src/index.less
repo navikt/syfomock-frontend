@@ -11,26 +11,39 @@
 
 #root {
   display: grid;
-  grid-template-columns: 20vw 30vw 30vw 20vw;
-  grid-template-rows: 5vh 95vh;
-  grid-template-areas:
-          "header main main r-sidebar"
-          "l-sidebar main main r-sidebar"
-}
-
-.meny {
-  grid-area: l-sidebar;
+  grid-template-columns: 1fr;
+  grid-template-areas: "header" "main" "l-sidebar";
 }
 
 .main {
-  padding-top: 1rem;
+  padding: 3rem 1rem;
   grid-area: main;
   display: flex;
-  place-self: start center;
+  place-self: center;
   flex-direction: column;
-  width: 25vw;
+  width: 100vw;
   height: 100%;
 }
+
+
+@media (min-width: 600px) {
+  #root {
+    grid-template-columns: 20vw 30vw 30vw 20vw;
+    grid-template-rows: 5vh 95vh;
+    grid-template-areas:
+            "header main main r-sidebar"
+            "l-sidebar main main r-sidebar"
+  }
+
+  .main {
+    width: 25vw;
+  }
+}
+
+  .meny {
+  grid-area: l-sidebar;
+}
+
 
 .sentrert {
   place-self: center;
@@ -42,26 +55,14 @@
   display: block;
 }
 
-.periodepanel {
-  overflow: hidden;
+.flex-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.periodeknapp {
-  float: right;
-}
-
-.flex--right {
-  align-self: flex-end;
-}
-
-.float--right {
-  float: right;
-  padding: 0.5em
-}
-
-.float--left {
-  float: left;
-  padding: 0.5em
+.flex--end {
+  margin-left: auto;
 }
 
 .header {
