@@ -1,10 +1,26 @@
 import React, {useState} from "react";
 import {Input} from "nav-frontend-skjema";
+import { guid } from 'nav-frontend-js-utils';
+import {Undertekst} from "nav-frontend-typografi";
 
 
-export function useInput({ label, initialState="" }) {
+export function useInput({ label, initialState="", tips="" }) {
     const [value, setValue] = useState(initialState);
-    const input = <Input label={label} value={value} onChange={e => setValue(e.target.value)} />;
+
+    const inputId = guid();
+    const input = (<div className="skjemaelement">
+        <div className="flex-container">
+            <label className="skjemaelement__label" htmlFor={inputId}>{label}</label>
+            {tips !== "" && <Undertekst className="flex--end">{tips}</Undertekst>}
+        </div>
+        <input
+            type="text"
+            className="skjemaelement__input input--fullbredde"
+            id={inputId}
+            value={value}
+            onChange={e => setValue(e.target.value)}
+        />
+    </div>);
     return [value, input, setValue];
 }
 

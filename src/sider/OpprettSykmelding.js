@@ -37,8 +37,8 @@ function finnTidligsteDag(perioder) {
 export default function OpprettSykmelding() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
     const startdato = moment().subtract(6, 'days').format("YYYY-MM-DD");
-    const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useInput({label: "Startdato på syketilfelle", initialState: startdato});
-    const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato});
+    const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useInput({label: "Startdato på syketilfelle", initialState: startdato, tips: "Felt 0"});
+    const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato, tips: "Fra Infotrygd"});
     const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Utstedelsesdato", initialState: startdato});
     const eid = randomInteger(1000000000, 99999999999);
     const msgid = randomInteger(1000000000, 99999999999);
@@ -51,7 +51,7 @@ export default function OpprettSykmelding() {
         "tom": moment().format("YYYY-MM-DD"),
         "type": "HUNDREPROSENT"
     }]);
-    const [kontaktdato, kontaktdatoInput] = useInput({label: "Tilbakedatering: Kontaktdato (YYYY-MM-DD)"});
+    const [kontaktdato, kontaktdatoInput] = useInput({label: "Tilbakedatering: Kontaktdato", tips: "YYYY-MM-DD, f.eks. " + moment().format("YYYY-MM-DD")});
     const [begrunnikkekontakt, begrunnikkekontaktInput] = useInput({label: "Tilbakedatering: Begrunnelse"});
     const [periodedager, setPeriodedager] = useState(antallPeriodeDager(perioder));
     const [simple, setSimple] = useLocalStorage('simple-mode', true);
@@ -223,7 +223,10 @@ export default function OpprettSykmelding() {
                     onClick={handleManglendeTilretteleggingPaaArbeidsplassen}
                     defaultChecked={manglendeTilretteleggingPaaArbeidsplassen}
                 />
-            </React.Fragment>}
+                {kontaktdatoInput}
+                {begrunnikkekontaktInput}
+            </React.Fragment>
+            }
             <div className="flex-container">
                 <Knapp className="blokk-xs" htmlType="button" onClick={addPeriode}>Legg til periode</Knapp>
                 <div className="flex--end skjemaelement__sporsmal">{isNaN(periodedager) ? "Det er noe feil i periodene!" : periodedager + " dager"}</div>
@@ -272,12 +275,6 @@ export default function OpprettSykmelding() {
                     </Select>
                 </SkjemaGruppe>
             ))}
-            {!simple &&
-            <React.Fragment>
-                {kontaktdatoInput}
-                {begrunnikkekontaktInput}
-            </React.Fragment>
-            }
             <Hovedknapp htmlType="button" onClick={handleSubmit} className='blokk-xs'>Send sykmelding</Hovedknapp>
         </form>
         {isLoaded ?
