@@ -31,4 +31,4 @@ spec:
     max: 2
     cpuThresholdPercentage: 90
   ingresses:
-    - "https://syfomock.nais.preprod.local"
+    - "https://syfomock-frontend.nais.preprod.local"
