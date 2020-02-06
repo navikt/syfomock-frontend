@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
@@ -26,42 +26,40 @@ const useGetTestbrukere = () => {
             });
     };
 
-    return [get, isLoaded, testbrukere, error, setTestbrukere];
+    return [get, isLoaded, testbrukere, error];
 };
 
-export default function Testbrukere() {
-    const [getTestbrukere, testbrukereLoaded, testbrukere, testbrukereError, setTestbrukere] = useGetTestbrukere();
+export default function PlanlagtVarsel() {
+    const [getTestbrukere, testbrukereLoaded, testbrukere, testbrukereError] = useGetTestbrukere();
 
     useEffect(() => {
         getTestbrukere();
-        }, []);
+    });
 
     useEffect(() => {
-        let test = testbrukere;
         for (let i = 0; i < testbrukere.length; i++) {
             fetch(API_URL + "/hentAktoerIdByFnr/" + testbrukere[i].fnr)
                 .then(fetchStatusHandler)
                 .then(res => res.text())
                 .then(res => {
-                    test[i].aktoerId = res;
+                    testbrukere[i].aktoerId = res;
                 });
         }
-        setTestbrukere(test);
-    }, [testbrukere]);
+    }, [testbrukereLoaded]);
 
     const renderTabell = () => {
         return (
             <table className="tabell tabell--stripet">
                 <thead>
-                    <th>Fødselsnummer</th>
-                    <th>AktørID</th>
+                <th>Fødselsnummer</th>
+                <th>AktørID</th>
                 </thead>
                 <tbody>
                 {testbrukere.map(bruker =>
-                        <tr>
-                            <td>{bruker.fnr}</td>
-                            <td>{bruker.aktoerId}</td>
-                        </tr>)
+                    <tr>
+                        <td>{bruker.fnr}</td>
+                        <td>{bruker.aktoerId}</td>
+                    </tr>)
                 }
                 </tbody>
             </table>
