@@ -39,9 +39,9 @@ export default function OpprettSykmelding() {
     const startdato = moment().subtract(6, 'days').format("YYYY-MM-DD");
     const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useInput({label: "Startdato på syketilfelle", initialState: startdato, tips: "Felt 0"});
     const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato, tips: "Fra Infotrygd"});
-    const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Utstedelsesdato", initialState: startdato});
+    const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Behandlingsdato", initialState: startdato, tips: "Også kalt utstedelsesdato"});
     const eid = randomInteger(1000000000, 99999999999);
-    const msgid = randomInteger(1000000000, 99999999999);
+    const [msgid, msgidInput] = useInput({label: "Message-ID", initialState: randomInteger(1000000000, 99999999999)});
     const [diagnosekode, setDiagnosekode] = useState("L87");
     const [smtype, setSmtype] = useState("SM2013");
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "0225922395"});
@@ -225,6 +225,7 @@ export default function OpprettSykmelding() {
                 />
                 {kontaktdatoInput}
                 {begrunnikkekontaktInput}
+                {msgidInput}
             </React.Fragment>
             }
             <div className="flex-container">
