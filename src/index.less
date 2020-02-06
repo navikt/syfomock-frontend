@@ -11,6 +11,7 @@
 
 #root {
   display: grid;
+  padding-top: 1rem;
   grid-template-columns: 1fr;
   grid-template-areas: "header" "main" "l-sidebar";
 }
@@ -28,20 +29,40 @@
 
 @media (min-width: 600px) {
   #root {
+    grid-template-columns: 30vw 60vw;
+    grid-template-rows: 5vh 95vh;
+    grid-template-areas: "header header"
+    "l-sidebar main"
+    "r-sidebar main"
+  }
+  .main {
+    width: 50vw;
+  }
+
+}
+
+.meny {
+  grid-area: l-sidebar;
+  padding: 1rem 1rem;
+}
+
+@media (min-width: 1000px) {
+  #root {
     grid-template-columns: 20vw 30vw 30vw 20vw;
     grid-template-rows: 5vh 95vh;
     grid-template-areas:
             "header main main r-sidebar"
             "l-sidebar main main r-sidebar"
   }
+    .main {
+      width: 40vw;
+    }
+}
 
+@media (min-width: 1700px) {
   .main {
     width: 25vw;
   }
-}
-
-  .meny {
-  grid-area: l-sidebar;
 }
 
 
@@ -67,6 +88,7 @@
 
 .header {
   grid-area: header;
+  padding: 1rem 1rem;
   place-self: center;
 }
 

@@ -5,8 +5,6 @@ import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 
 
-
-
 function useGetTestbrukere() {
     const [data, setData] = useState([]);
     const [aktoerIdData, setAktoerIdData] = useState([]);
