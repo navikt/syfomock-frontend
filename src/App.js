@@ -8,7 +8,7 @@ import {Sidetittel} from "nav-frontend-typografi";
 import {Sider} from "./sider";
 import Lenkepanel from "nav-frontend-lenkepanel";
 
-export const API_URL = "https://syfomock.nais.preprod.local/syfomock";
+export const API_URL = "https://syfomockproxy-q.nav.no";
 
 export default function App() {
     return (
