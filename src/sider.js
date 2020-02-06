@@ -45,5 +45,5 @@ export const Sider = {
     PLANLAGT_VARSEL: {tittel: "Planlagt varsel", path: "/planlagt_varsel", komponent: <Unimplemented tittel="PLANLAGT_VARSEL"/>},
     SETT_LEGACY_I_TILTAK: {tittel: "Sett legacyfelter i tiltak", path: "/sett_legacy_i_tiltak", komponent: <SettLegacyFelter/>},
     LEGG_JOURNALPOST_PA_KO: {tittel: "Legg journalpost (inntektsmelding) på kø", path: "/legg_journalpost_pa_ko", komponent: <LeggJournalpostPaKo/>},
-    TESTBRUKERE_STATUS: {tittel: "Testbrukere oversikt", path: "/testbrukere", komponent: <Unimplemented tittel="TESTBRUKERE_STATUS"/>}
+    TESTBRUKERE_STATUS: {tittel: "Testbrukere oversikt", path: "/testbrukere", komponent: <Testbrukere />}
 };

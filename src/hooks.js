@@ -56,6 +56,30 @@ export function useGet() {
     return [get, isLoaded, returverdi, error];
 }
 
+export function useJsonGet() {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [returverdi, setReturverdi] = useState([]);
+    const [error, setError] = useState('');
+
+    const get = (url) => {
+        fetch(url)
+            .then(fetchStatusHandler)
+            .then(res => res.json())
+            .then(res => {
+                setIsLoaded(true);
+                setReturverdi(res);
+                setError("");
+            })
+            .catch(error => {
+                setIsLoaded(true);
+                setError(error.toString());
+                setReturverdi("");
+            });
+    };
+
+    return [get, isLoaded, returverdi, error];
+}
+
 export function useFormPost() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [returverdi, setReturverdi] = useState('');

@@ -1,53 +1,51 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
-import {fetchStatusHandler} from "../hooks";
 
-const useGetTestbrukere = () => {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [testbrukere, setTestbrukere] = useState([]);
-    const [error, setError] = useState('');
 
-    const get = () => {
-        fetch(API_URL + "/testbrukere")
-            .then(fetchStatusHandler)
-            .then(res => res.json())
-            .then((data) => {
-                setIsLoaded(true);
-                setTestbrukere(data.map(o => ({fnr: o.fnr, aktoerId: ""})));
-                setError("");
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-                setTestbrukere("");
-            });
-    };
 
-    return [get, isLoaded, testbrukere, error, setTestbrukere];
-};
+
+function useGetTestbrukere() {
+    const [data, setData] = useState([]);
+    const [aktoerIdData, setAktoerIdData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    async function fetchFnr() {
+        const response = await fetch(API_URL + "/testbrukere");
+        const json = await response.json();
+        setData(json);
+    }
+
+    async function fetchAktoerId() {
+        let newData = [...data];
+        for (let i = 0; i < newData.length; i++) {
+            const response = await fetch(API_URL + "/hentAktoerIdByFnr/" + newData[i].fnr);
+            if (response.status !== 200) {
+                newData[i].aktoerId = "Henting feilet"
+            } else {
+                newData[i].aktoerId = await response.text();
+            }
+        }
+        setAktoerIdData(newData);
+    }
+
+    useEffect(() => {
+        fetchFnr();
+    }, []);
+
+    useEffect(() => {
+        fetchAktoerId();
+        setLoading(false);
+    }, [data]);
+
+    return [aktoerIdData, loading];
+
+}
 
 export default function Testbrukere() {
-    const [getTestbrukere, testbrukereLoaded, testbrukere, testbrukereError, setTestbrukere] = useGetTestbrukere();
-
-    useEffect(() => {
-        getTestbrukere();
-        }, []);
-
-    useEffect(() => {
-        let test = testbrukere;
-        for (let i = 0; i < testbrukere.length; i++) {
-            fetch(API_URL + "/hentAktoerIdByFnr/" + testbrukere[i].fnr)
-                .then(fetchStatusHandler)
-                .then(res => res.text())
-                .then(res => {
-                    test[i].aktoerId = res;
-                });
-        }
-        setTestbrukere(test);
-    }, [testbrukere]);
+    const [testbrukere, loading] = useGetTestbrukere();
 
     const renderTabell = () => {
         return (
@@ -73,9 +71,8 @@ export default function Testbrukere() {
             <Undertittel className='blokk-xs'>{Sider.TESTBRUKERE_STATUS.tittel}</Undertittel>
             <p>Funker dårlig :)</p>
 
-            {testbrukereLoaded ?
-                testbrukereError === '' ? renderTabell()
-                    : <AlertStripeFeil>{testbrukereError}</AlertStripeFeil>
+            {!loading ?
+                renderTabell()
                 : <React.Fragment/>}
         </React.Fragment>
     );

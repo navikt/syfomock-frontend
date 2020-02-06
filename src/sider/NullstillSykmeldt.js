@@ -2,13 +2,13 @@ import React from 'react';
 import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
-import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
-import {useGet, useLocalStorageInput} from "../hooks";
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
+import {useJsonGet, useLocalStorageInput} from "../hooks";
 
 export default function NullstillSykmeldt() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
-    const [get, isLoaded, returverdi, error] = useGet();
+    const [get, isLoaded, returverdi, error] = useJsonGet();
 
     const handleSubmit = (event) => {
         event.preventDefault();
