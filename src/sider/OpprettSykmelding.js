@@ -41,7 +41,7 @@ export default function OpprettSykmelding() {
     const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato, tips: "Fra Infotrygd"});
     const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Behandlingsdato", initialState: startdato, tips: "Også kalt utstedelsesdato"});
     const eid = randomInteger(1000000000, 99999999999);
-    const [msgid, msgidInput] = useInput({label: "Message-ID", initialState: randomInteger(1000000000, 99999999999)});
+    const [msgid, msgidInput] = useInput({label: "msgId", initialState: randomInteger(1000000000, 99999999999), tips: "For sporing i loggene!"});
     const [diagnosekode, setDiagnosekode] = useState("L87");
     const [smtype, setSmtype] = useState("SM2013");
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "0225922395"});
