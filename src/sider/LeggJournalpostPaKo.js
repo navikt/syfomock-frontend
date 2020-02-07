@@ -5,6 +5,7 @@ import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useFormPost, useInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function LeggJournalpostPaKo() {
     const [id, idInput] = useInput({label: "Journalpost-ID"});
@@ -18,6 +19,7 @@ export default function LeggJournalpostPaKo() {
 
     return (
         <React.Fragment>
+          <Side>
             <Undertittel className='blokk-xs'>{Sider.LEGG_JOURNALPOST_PA_KO.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {idInput}
@@ -27,6 +29,7 @@ export default function LeggJournalpostPaKo() {
                 error === '' ? <AlertStripeSuksess>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
+              </Side>
         </React.Fragment>
     );
 }

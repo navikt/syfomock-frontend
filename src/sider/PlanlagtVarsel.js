@@ -4,6 +4,7 @@ import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {fetchStatusHandler} from "../hooks";
+import Side from "../components/Side/Side"
 
 const useGetTestbrukere = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -67,7 +68,7 @@ export default function PlanlagtVarsel() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.TESTBRUKERE_STATUS.tittel}</Undertittel>
             <p>Funker dårlig :)</p>
 
@@ -75,6 +76,6 @@ export default function PlanlagtVarsel() {
                 testbrukereError === '' ? renderTabell()
                     : <AlertStripeFeil>{testbrukereError}</AlertStripeFeil>
                 : <React.Fragment/>}
-        </React.Fragment>
+        </Side>
     );
 };

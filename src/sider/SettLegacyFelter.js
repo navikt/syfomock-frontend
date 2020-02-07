@@ -6,6 +6,7 @@ import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useInput} from "../hooks";
 import {Select} from "nav-frontend-skjema";
+import Side from "../components/Side/Side";
 
 export default function SettLegacyFelter() {
     const [id, idInput] = useInput({label: "Oppfølgingsdialog-ID"});
@@ -21,7 +22,7 @@ export default function SettLegacyFelter() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.SLETT_VEILEDEROPPGAVER.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {idInput}
@@ -40,6 +41,6 @@ export default function SettLegacyFelter() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+        </Side>
     );
 }

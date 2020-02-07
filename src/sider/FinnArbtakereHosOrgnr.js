@@ -5,6 +5,7 @@ import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {useGet, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
+import Side from "../components/Side/Side";
 
 export default function FinnArbtakereHosOrgnr() {
     const [orgnr, input] = useLocalStorageInput({label: "Organisasjonsnummer", key: "orgnr"});
@@ -20,6 +21,7 @@ export default function FinnArbtakereHosOrgnr() {
 
     return (
         <React.Fragment>
+          <Side>
             <Undertittel className='blokk-xs'>{Sider.FINN_ARBTAKERE_HOS_ORGNR.tittel}</Undertittel>
             <form onSubmit={e => handleSubmit(e)}>
                 {input}
@@ -30,6 +32,7 @@ export default function FinnArbtakereHosOrgnr() {
                     <AlertStripeSuksess>{returverdi}</AlertStripeSuksess> :
                     <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
+              </Side>
         </React.Fragment>
     );
 

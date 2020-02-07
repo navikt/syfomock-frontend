@@ -10,6 +10,7 @@ import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
 import {useFormPost, useInput, useLocalStorage, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
+import Side from "../components/Side/Side";
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -156,7 +157,7 @@ export default function OpprettSykmelding() {
         post(API_URL + "/nyttmottak/sykmelding/opprett/", data);
     };
 
-    return <React.Fragment>
+    return <Side>
         <div className="flex-container">
         <Undertittel>{Sider.OPPRETT_SYKMELDING.tittel}</Undertittel>
         <Checkbox
@@ -283,5 +284,5 @@ export default function OpprettSykmelding() {
                 <AlertStripeSuksess>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeSuksess>
                 : <AlertStripeFeil>{error}</AlertStripeFeil>
             : <React.Fragment/>}
-    </React.Fragment>;
+    </Side>;
 }

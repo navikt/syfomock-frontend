@@ -5,6 +5,7 @@ import {API_URL} from "../App";
 import {Sider} from "../sider";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {useJsonGet, useLocalStorageInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function NullstillSykmeldt() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
@@ -16,7 +17,7 @@ export default function NullstillSykmeldt() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.NULLSTILL_SYKMELDT.tittel}</Undertittel>
             <AlertStripeInfo className="blokk-xs">Dette fjerner alle sykmeldinger fra brukeren, samt tilhørende søknader, hendelser og varsler</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
@@ -27,6 +28,6 @@ export default function NullstillSykmeldt() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+              </Side>
     );
 }

@@ -5,6 +5,7 @@ import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function NullstillOppfolgingsdialog() {
     const [fnr, fnrInput] = useInput({label: "Oppfølgingsdialog-ID"});
@@ -16,7 +17,7 @@ export default function NullstillOppfolgingsdialog() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.NULLSTILL_OPPFOLGINGSDIALOG.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
@@ -26,6 +27,6 @@ export default function NullstillOppfolgingsdialog() {
                 error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+              </Side>
     );
 }

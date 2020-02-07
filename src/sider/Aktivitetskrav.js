@@ -5,6 +5,7 @@ import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useInput, useLocalStorageInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function Aktivitetskrav() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
@@ -20,7 +21,8 @@ export default function Aktivitetskrav() {
     };
 
     return (
-        <React.Fragment>
+      <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.AKTIVITETSKRAV.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
@@ -31,6 +33,7 @@ export default function Aktivitetskrav() {
                 error === '' ? <code>{returverdi}</code>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
+        </Side>
         </React.Fragment>
     );
 }

@@ -5,6 +5,7 @@ import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function FinnSykmeldingFraMottakId() {
     const [mottakId, mottakIdInput] = useInput({label: "Mottaks-ID"});
@@ -17,6 +18,7 @@ export default function FinnSykmeldingFraMottakId() {
 
     return (
         <React.Fragment>
+          <Side>
             <Undertittel className='blokk-xs'>{Sider.FINN_SYKMELDING_FRA_MOTTAKID.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {mottakIdInput}
@@ -26,6 +28,7 @@ export default function FinnSykmeldingFraMottakId() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
+              </Side>
         </React.Fragment>
     );
 }

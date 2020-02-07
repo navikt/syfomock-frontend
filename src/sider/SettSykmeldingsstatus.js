@@ -6,6 +6,7 @@ import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
 import SelectSearch from "react-select-search";
+import Side from "../components/Side/Side";
 
 export default function SettSykmeldingsstatus() {
     const [uuid, uuidInput] = useInput({label: "Sykmeldings-ID"});
@@ -24,7 +25,7 @@ export default function SettSykmeldingsstatus() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.SETT_SYKMELDINGSSTATUS.tittel}</Undertittel>
             <AlertStripeInfo className="blokk-xs">Sykmelding-ID er ID'en som er på slutten av URL'en om du går på sykefravær som en sluttbruker og inn på en spesifikk sykmelding</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
@@ -44,6 +45,6 @@ export default function SettSykmeldingsstatus() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+        </Side>
     );
 }

@@ -5,6 +5,7 @@ import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useLocalStorageInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function NullstillNarmesteLeder() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Sykmeldtes fødselsnummer", key: "fnr"});
@@ -16,7 +17,7 @@ export default function NullstillNarmesteLeder() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.NULLSTILL_NAERMESTELEDER.tittel}</Undertittel>
             <AlertStripeInfo className="blokk-xs">Dette fjerner alle ledere knyttet til brukeren, samt tilhørende hendelser</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
@@ -27,6 +28,6 @@ export default function NullstillNarmesteLeder() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+              </Side>
     );
 }

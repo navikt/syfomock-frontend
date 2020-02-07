@@ -5,6 +5,7 @@ import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useLocalStorageInput} from "../hooks";
+import Side from "../components/Side/Side";
 
 export default function NullstillMotebehov() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
@@ -16,7 +17,7 @@ export default function NullstillMotebehov() {
     };
 
     return (
-        <React.Fragment>
+          <Side>
             <Undertittel className='blokk-xs'>{Sider.NULLSTILL_MOTEBEHOV.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
@@ -26,6 +27,6 @@ export default function NullstillMotebehov() {
                 error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+              </Side>
     );
 }

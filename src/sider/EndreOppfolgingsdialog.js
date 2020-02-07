@@ -6,6 +6,7 @@ import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useInput} from "../hooks";
 import moment from "moment";
+import Side from "../components/Side/Side";
 
 export default function EndreOppfolgingsdialog() {
     const [oppfolgingsdialogId, oppfolgingsdialogIdInput] = useInput({label: "Oppfølgingsdialog-ID"});
@@ -24,6 +25,7 @@ export default function EndreOppfolgingsdialog() {
 
     return (
         <React.Fragment>
+          <Side>
             <Undertittel className='blokk-xs'>{Sider.ENDRE_OPPFOLGINGSDIALOG.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {oppfolgingsdialogIdInput}
@@ -36,6 +38,7 @@ export default function EndreOppfolgingsdialog() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
+              </Side>
         </React.Fragment>
     );
 }

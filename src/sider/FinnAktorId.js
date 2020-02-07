@@ -5,6 +5,8 @@ import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useLocalStorageInput} from "../hooks";
+import Side from "../components/Side/Side";
+
 
 export default function FinnAktorId() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
@@ -17,6 +19,7 @@ export default function FinnAktorId() {
 
     return (
         <React.Fragment>
+          <Side>
             <Undertittel className='blokk-xs'>{Sider.FINN_AKTORID.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
@@ -29,6 +32,7 @@ export default function FinnAktorId() {
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                     : <AlertStripeSuksess>Aktør-ID: {returverdi}</AlertStripeSuksess>
                 : <React.Fragment/>}
+              </Side>
         </React.Fragment>
     );
 }

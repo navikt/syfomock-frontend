@@ -3,6 +3,7 @@ import {Undertittel} from "nav-frontend-typografi";
 import {API_URL} from "../App";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
+import Side from "../components/Side/Side";
 
 
 function useGetTestbrukere() {
@@ -65,13 +66,13 @@ export default function Testbrukere() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.TESTBRUKERE_STATUS.tittel}</Undertittel>
             <p>Funker dårlig :)</p>
 
             {!loading ?
                 renderTabell()
                 : <React.Fragment/>}
-        </React.Fragment>
+        </Side>
     );
 };

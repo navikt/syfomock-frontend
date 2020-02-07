@@ -7,6 +7,7 @@ import moment from "moment";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {useGet, useInput, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
+import Side from "../components/Side/Side";
 
 export default function RegistrerNaermesteLeder() {
     const [brukerFnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
@@ -31,7 +32,7 @@ export default function RegistrerNaermesteLeder() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.REGISTRER_NAERMESTELEDER.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
@@ -53,6 +54,6 @@ export default function RegistrerNaermesteLeder() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment/>}
-        </React.Fragment>
+        </Side>
     );
 }

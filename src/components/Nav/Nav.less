@@ -1,0 +1,47 @@
+@import 'variables';
+@import 'mixins';
+
+nav.Nav {
+    display: flex;
+    flex-direction: column;
+
+    p {
+        pointer-events: none;
+    }
+
+    > a {
+        text-decoration: none;
+        padding: 0.32rem 0.5rem;
+        color: black;
+
+        &:hover,
+        &.active {
+            color: @navBla;
+        }
+
+        &.active {
+            box-shadow: inset 0.35rem 0 0 0 @fokusFarge;
+        }
+
+        .focusable();
+
+        &:focus {
+            z-index: 1000;
+        }
+    }
+
+    > a .typo-normal {
+        font-weight: 600;
+        font-size: 1.125rem;
+    }
+
+    > a.inactive {
+        color: @navGra60;
+    }
+
+    &.inactive {
+        > a {
+            box-shadow: none;
+        }
+    }
+}

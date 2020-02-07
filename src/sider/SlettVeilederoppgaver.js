@@ -6,6 +6,7 @@ import {Sider} from "../sider";
 import {API_URL} from "../App";
 import {useGet, useLocalStorageInput} from "../hooks";
 import {Select} from "nav-frontend-skjema";
+import Side from "../components/Side/Side";
 
 export default function SlettVeilederoppgaver() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
@@ -19,7 +20,7 @@ export default function SlettVeilederoppgaver() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.SLETT_VEILEDEROPPGAVER.tittel}</Undertittel>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
@@ -38,6 +39,6 @@ export default function SlettVeilederoppgaver() {
                 error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+        </Side>
     );
 }

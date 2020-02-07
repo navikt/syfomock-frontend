@@ -5,6 +5,7 @@ import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {useGet, useInput} from "../hooks";
+import Side from "../components/Side/Side"
 
 export default function SlettMotebehov() {
     const [uuid, uuidInput] = useInput({label: "Møtebehov-UUID"});
@@ -16,7 +17,7 @@ export default function SlettMotebehov() {
     };
 
     return (
-        <React.Fragment>
+        <Side>
             <Undertittel className='blokk-xs'>{Sider.SLETT_MOTEBEHOV.tittel}</Undertittel>
             <AlertStripeInfo className='blokk-xs'>Spør en utvikler eller se på innhold i response fra syfomotebehov i Network-fanen i Chrome</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
@@ -27,6 +28,6 @@ export default function SlettMotebehov() {
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment />}
-        </React.Fragment>
+        </Side>
     );
 }
