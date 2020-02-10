@@ -8,7 +8,7 @@ const Nav = ({ active }) => {
     return (
         <nav className={`Nav ${active ? '' : 'inactive'}`}>
         {Object.keys(Sider).map(side => (
-            <Link id={side} to={Sider[side].path} active={window.location.pathname !== Sider[side].path}><Normaltekst>{Sider[side].tittel}</Normaltekst></Link>
+            <Link key={side} id={side} to={Sider[side].path} active={window.location.pathname !== Sider[side].path}><Normaltekst>{Sider[side].tittel}</Normaltekst></Link>
         ))}
         </nav>
     );

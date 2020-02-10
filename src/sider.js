@@ -20,6 +20,7 @@ import NullstillOppfolgingsdialog from "./sider/NullstillOppfolgingsdialog";
 import EndreOppfolgingsdialog from "./sider/EndreOppfolgingsdialog";
 import SettLegacyFelter from "./sider/SettLegacyFelter";
 import LeggJournalpostPaKo from "./sider/LeggJournalpostPaKo";
+import PlanlagtVarsel from "./sider/PlanlagtVarsel";
 import Side from "./components/Side/Side";
 
 const Unimplemented = ({tittel}) => <Side><code class="sentrert">unimplemented!({tittel})</code></Side>;
@@ -43,7 +44,7 @@ export const Sider = {
     SLETT_OPPFOLGINGSDIALOG: {tittel: "Slett oppfølgingsdialog", path: "/slett_oppfolgingsdialog", komponent: <SlettOppfolgingsdialog/>},
     NULLSTILL_OPPFOLGINGSDIALOG: {tittel: "Nullstill oppfølgingsdialoger for bruker", path: "/nullstill_oppfolgingsdialog", komponent: <NullstillOppfolgingsdialog/>},
     ENDRE_OPPFOLGINGSDIALOG: {tittel: "Endre oppfølgingsdialog", path: "/endre_oppfolgingsdialog", komponent: <EndreOppfolgingsdialog/>},
-    PLANLAGT_VARSEL: {tittel: "Planlagt varsel", path: "/planlagt_varsel", komponent: <Unimplemented tittel="PLANLAGT_VARSEL"/>},
+    PLANLAGT_VARSEL: {tittel: "Planlagt varsel", path: "/planlagt_varsel", komponent: <PlanlagtVarsel />},
     SETT_LEGACY_I_TILTAK: {tittel: "Sett legacyfelter i tiltak", path: "/sett_legacy_i_tiltak", komponent: <SettLegacyFelter/>},
     LEGG_JOURNALPOST_PA_KO: {tittel: "Legg journalpost (inntektsmelding) på kø", path: "/legg_journalpost_pa_ko", komponent: <LeggJournalpostPaKo/>},
     TESTBRUKERE_STATUS: {tittel: "Testbrukere oversikt", path: "/testbrukere", komponent: <Testbrukere />}
