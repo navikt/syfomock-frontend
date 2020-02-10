@@ -37,7 +37,7 @@ function finnTidligsteDag(perioder) {
 
 export default function OpprettSykmelding() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
-    const startdato = moment().subtract(6, 'days').format("YYYY-MM-DD");
+    const startdato = moment().subtract(7, 'days').format("YYYY-MM-DD");
     const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useInput({label: "Startdato på syketilfelle", initialState: startdato, tips: "Felt 0"});
     const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato, tips: "Fra Infotrygd"});
     const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Behandlingsdato", initialState: startdato, tips: "Også kalt utstedelsesdato"});
@@ -49,7 +49,7 @@ export default function OpprettSykmelding() {
     const [manglendeTilretteleggingPaaArbeidsplassen, setManglendeTilretteleggingPaaArbeidsplassen] = useState(false);
     const [perioder, setPerioder] = useState([{
         "fom": startdato,
-        "tom": moment().format("YYYY-MM-DD"),
+        "tom": moment().subtract(1, 'days').format("YYYY-MM-DD"),
         "type": "HUNDREPROSENT"
     }]);
     const [kontaktdato, kontaktdatoInput] = useInput({label: "Tilbakedatering: Kontaktdato", tips: "YYYY-MM-DD, f.eks. " + moment().format("YYYY-MM-DD")});
