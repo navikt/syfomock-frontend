@@ -1,5 +1,4 @@
 import React, {useCallback, useState} from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Checkbox} from "nav-frontend-skjema";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
@@ -32,8 +31,7 @@ export default function RegistrerNaermesteLeder() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.REGISTRER_NAERMESTELEDER.tittel}</Undertittel>
+        <Side tittel={Sider.REGISTRER_NAERMESTELEDER.tittel}>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 {lederFnrInput}

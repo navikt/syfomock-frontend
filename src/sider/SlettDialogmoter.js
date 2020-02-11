@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -17,16 +16,15 @@ export default function NullstillDialogmoter() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.SLETT_DIALOGMOTER.tittel}</Undertittel>
+        <Side tittel={Sider.SLETT_DIALOGMOTER.tittel}>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
+                : <React.Fragment/>}
         </Side>
     );
 }

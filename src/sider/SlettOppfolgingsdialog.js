@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
@@ -17,17 +16,16 @@ export default function SlettOppfolgingsdialog() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.SLETT_OPPFOLGINGSDIALOG.tittel}</Undertittel>
+        <Side tittel={Sider.SLETT_OPPFOLGINGSDIALOG.tittel}>
             <AlertStripeInfo className='blokk-xs'>Oppfølgingsdialog-ID er tallet du finner etter /oppfolgingsplaner/ i URLen til oppfølgingsdialogen</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {idInput}
                 <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
+                : <React.Fragment/>}
         </Side>
     );
 }

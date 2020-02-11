@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
@@ -17,17 +16,16 @@ export default function NullstillNarmesteLeder() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.NULLSTILL_NAERMESTELEDER.tittel}</Undertittel>
+        <Side tittel={Sider.NULLSTILL_NAERMESTELEDER.tittel}>
             <AlertStripeInfo className="blokk-xs">Dette fjerner alle ledere knyttet til brukeren, samt tilhørende hendelser</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
-              </Side>
+                : <React.Fragment/>}
+        </Side>
     );
 }

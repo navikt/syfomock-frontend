@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -21,19 +20,16 @@ export default function Aktivitetskrav() {
     };
 
     return (
-      <React.Fragment>
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.AKTIVITETSKRAV.tittel}</Undertittel>
+        <Side tittel={Sider.AKTIVITETSKRAV.tittel}>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 {sykmeldingDokInput}
                 <Hovedknapp className='blokk-xs'>Hent</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <code>{returverdi}</code>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
+                : <React.Fragment/>}
         </Side>
-        </React.Fragment>
     );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
@@ -17,19 +16,17 @@ export default function NullstillMote() {
     };
 
     return (
-        <React.Fragment>
-          <Side>
-            <Undertittel className='blokk-xs'>{Sider.NULLSTILL_MOTEDELTAGER.tittel}</Undertittel>
-            <AlertStripeInfo className="blokk-xs">Du må se i møte-appen for arbeidsgivere og hente ut den lange strengen i slutten av URL'en. Sett denne inn i skjemaet under</AlertStripeInfo>
+        <Side tittel={Sider.NULLSTILL_MOTEDELTAGER.tittel}>
+            <AlertStripeInfo className="blokk-xs">Du må se i møte-appen for arbeidsgivere og hente ut den lange strengen i slutten av URL'en. Sett denne inn i skjemaet
+                under</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {uuidInput}
                 <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
-              </Side>
-        </React.Fragment>
+                : <React.Fragment/>}
+        </Side>
     );
 }

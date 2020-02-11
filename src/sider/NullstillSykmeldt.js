@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {Sider} from "../sider";
@@ -17,17 +16,16 @@ export default function NullstillSykmeldt() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.NULLSTILL_SYKMELDT.tittel}</Undertittel>
+        <Side tittel={Sider.NULLSTILL_SYKMELDT.tittel}>
             <AlertStripeInfo className="blokk-xs">Dette fjerner alle sykmeldinger fra brukeren, samt tilhørende søknader, hendelser og varsler</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Nullstill</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
-              </Side>
+                : <React.Fragment/>}
+        </Side>
     );
 }

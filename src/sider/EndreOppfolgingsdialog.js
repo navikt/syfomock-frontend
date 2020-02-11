@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -24,9 +23,7 @@ export default function EndreOppfolgingsdialog() {
     };
 
     return (
-        <React.Fragment>
-          <Side>
-            <Undertittel className='blokk-xs'>{Sider.ENDRE_OPPFOLGINGSDIALOG.tittel}</Undertittel>
+        <Side tittel={Sider.ENDRE_OPPFOLGINGSDIALOG.tittel}>
             <form onSubmit={handleSubmit}>
                 {oppfolgingsdialogIdInput}
                 {fomInput}
@@ -34,11 +31,10 @@ export default function EndreOppfolgingsdialog() {
                 {evalueresInput}
                 <Hovedknapp className='blokk-xs'>Endre</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
-              </Side>
-        </React.Fragment>
+                : <React.Fragment/>}
+        </Side>
     );
 }

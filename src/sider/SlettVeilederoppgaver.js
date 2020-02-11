@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -20,8 +19,7 @@ export default function SlettVeilederoppgaver() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.SLETT_VEILEDEROPPGAVER.tittel}</Undertittel>
+        <Side tittel={Sider.SLETT_VEILEDEROPPGAVER.tittel}>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Select label="Oppgavetype"
@@ -35,10 +33,10 @@ export default function SlettVeilederoppgaver() {
                 </Select>
                 <Hovedknapp className='blokk-xs'>Slett</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
+                : <React.Fragment/>}
         </Side>
     );
 }

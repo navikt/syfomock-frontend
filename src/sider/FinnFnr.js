@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -17,9 +16,7 @@ export default function FinnFnr() {
     };
 
     return (
-        <React.Fragment>
-          <Side>
-            <Undertittel className='blokk-xs'>{Sider.FINN_FNR.tittel}</Undertittel>
+        <Side tittel={Sider.FINN_FNR.tittel}>
             <form onSubmit={handleSubmit}>
                 {aktorIdInput}
                 <Hovedknapp className='blokk-xs'>Hent fødselsnummer</Hovedknapp>
@@ -31,7 +28,6 @@ export default function FinnFnr() {
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                     : <AlertStripeSuksess>Fødselsnummer: {returverdi}</AlertStripeSuksess>
                 : <React.Fragment/>}
-              </Side>
-        </React.Fragment>
+        </Side>
     );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
-const Link = ({ active = true, id, to, children }) => {
+const Link = ({active = true, id, to, children}) => {
     const onClick = (event) => {
         (event.target).blur();
     };

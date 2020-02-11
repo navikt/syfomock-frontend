@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import Lenke from "nav-frontend-lenker";
 import {API_URL} from "../App";
 import {Sider} from "../sider";
@@ -32,7 +31,7 @@ function useGetTestbrukere() {
 
     useEffect(() => {
         fetchAktoerId();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     return [aktoerIdData];
@@ -46,15 +45,15 @@ export default function Testbrukere() {
         return (
             <table className="tabell tabell--stripet">
                 <thead>
-                    <th>Fødselsnummer</th>
-                    <th>AktørID</th>
+                <th>Fødselsnummer</th>
+                <th>AktørID</th>
                 </thead>
                 <tbody>
                 {testbrukere.map(bruker =>
-                        <tr>
-                            <td>{bruker.fnr}</td>
-                            <td>{bruker.aktoerId}</td>
-                        </tr>)
+                    <tr>
+                        <td>{bruker.fnr}</td>
+                        <td>{bruker.aktoerId}</td>
+                    </tr>)
                 }
                 </tbody>
             </table>
@@ -62,10 +61,8 @@ export default function Testbrukere() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.TESTBRUKERE_STATUS.tittel}</Undertittel>
-          <p>Hvis noen trenger dette oppfordres det til å <Lenke href="https://github.com/navikt/syfomock-frontend">gjøre det sjæl!</Lenke></p>
-
+        <Side tittel={Sider.TESTBRUKERE_STATUS.tittel}>
+            <p>Hvis noen trenger dette oppfordres det til å <Lenke href="https://github.com/navikt/syfomock-frontend">gjøre det sjæl!</Lenke></p>
             {renderTabell()}
         </Side>
     );

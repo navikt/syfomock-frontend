@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -18,19 +17,16 @@ export default function FinnAktorId() {
     };
 
     return (
-        <React.Fragment>
-          <Side>
-            <Undertittel className='blokk-xs'>{Sider.FINN_AKTORID.tittel}</Undertittel>
+        <Side tittel={Sider.FINN_AKTORID.tittel}>
             <form onSubmit={handleSubmit}>
                 {fnrInput}
                 <Hovedknapp className='blokk-xs'>Hent aktør-ID</Hovedknapp>
             </form>
             {isLoaded ?
-                  error === ''
+                error === ''
                     ? <AlertStripeSuksess>Aktør-ID: {returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                 : <React.Fragment/>}
-              </Side>
-        </React.Fragment>
+        </Side>
     );
 }

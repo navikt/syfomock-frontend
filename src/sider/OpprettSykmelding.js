@@ -159,15 +159,15 @@ export default function OpprettSykmelding() {
 
     return <Side>
         <div className="flex-container">
-        <Undertittel>{Sider.OPPRETT_SYKMELDING.tittel}</Undertittel>
-        <Checkbox
-            label="Simple mode"
-            name="simple"
-            key="simple"
-            className="flex--end"
-            onChange={handleSimple}
-            defaultChecked={simple}
-        />
+            <Undertittel>{Sider.OPPRETT_SYKMELDING.tittel}</Undertittel>
+            <Checkbox
+                label="Simple mode"
+                name="simple"
+                key="simple"
+                className="flex--end"
+                onChange={handleSimple}
+                defaultChecked={simple}
+            />
         </div>
         {simple &&
         <AlertStripeInfo className="blokk-xs">Simple mode bruker tidligste dag i periodene som startdato på syketilfelle, identdato og utstedelsesdato.</AlertStripeInfo>}

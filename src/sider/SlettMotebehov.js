@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
@@ -17,8 +16,7 @@ export default function SlettMotebehov() {
     };
 
     return (
-        <Side>
-            <Undertittel className='blokk-xs'>{Sider.SLETT_MOTEBEHOV.tittel}</Undertittel>
+        <Side tittel={Sider.SLETT_MOTEBEHOV.tittel}>
             <AlertStripeInfo className='blokk-xs'>Spør en utvikler eller se på innhold i response fra syfomotebehov i Network-fanen i Chrome</AlertStripeInfo>
             <form onSubmit={handleSubmit}>
                 {uuidInput}

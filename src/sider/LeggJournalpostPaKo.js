@@ -1,5 +1,4 @@
 import React from 'react';
-import {Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
@@ -18,18 +17,15 @@ export default function LeggJournalpostPaKo() {
     };
 
     return (
-        <React.Fragment>
-          <Side>
-            <Undertittel className='blokk-xs'>{Sider.LEGG_JOURNALPOST_PA_KO.tittel}</Undertittel>
+        <Side tittel={Sider.LEGG_JOURNALPOST_PA_KO.tittel}>
             <form onSubmit={handleSubmit}>
                 {idInput}
                 <Hovedknapp className='blokk-xs'>Send</Hovedknapp>
             </form>
-            { isLoaded ?
+            {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment />}
-              </Side>
-        </React.Fragment>
+                : <React.Fragment/>}
+        </Side>
     );
 }
