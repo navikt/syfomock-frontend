@@ -71,7 +71,7 @@ export function useJsonGet() {
                   setIsLoaded(true);
                 } else {
                   setReturverdi("");
-                  setError(res.body);
+                  setError(res.body.message);
                   setIsLoaded(true);
                 }
             });
