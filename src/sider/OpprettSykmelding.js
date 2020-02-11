@@ -45,7 +45,7 @@ export default function OpprettSykmelding() {
     const [msgid, msgidInput] = useInput({label: "msgId", initialState: randomInteger(1000000000, 99999999999), tips: "For sporing i loggene!"});
     const [diagnosekode, setDiagnosekode] = useState("L87");
     const [smtype, setSmtype] = useState("SM2013");
-    const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "0225922395"});
+    const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "02125922395"});
     const [manglendeTilretteleggingPaaArbeidsplassen, setManglendeTilretteleggingPaaArbeidsplassen] = useState(false);
     const [perioder, setPerioder] = useState([{
         "fom": startdato,
