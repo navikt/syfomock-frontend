@@ -21,9 +21,6 @@ import EndreOppfolgingsdialog from "./sider/EndreOppfolgingsdialog";
 import SettLegacyFelter from "./sider/SettLegacyFelter";
 import LeggJournalpostPaKo from "./sider/LeggJournalpostPaKo";
 import PlanlagtVarsel from "./sider/PlanlagtVarsel";
-import Side from "./components/Side/Side";
-
-const Unimplemented = ({tittel}) => <Side><code class="sentrert">unimplemented!({tittel})</code></Side>;
 
 export const Sider = {
     OPPRETT_SYKMELDING: {tittel: "Opprett sykmelding", path: "/opprett_sykmelding", komponent: <OpprettSykmelding/>},

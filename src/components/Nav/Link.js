@@ -11,6 +11,7 @@ const Link = ({ active = true, id, to, children }) => {
             {children}
         </NavLink>
     ) : (
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <a className="inactive">{children}</a>
     );
 };

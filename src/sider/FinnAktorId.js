@@ -26,11 +26,9 @@ export default function FinnAktorId() {
                 <Hovedknapp className='blokk-xs'>Hent aktør-ID</Hovedknapp>
             </form>
             {isLoaded ?
-                !returverdi.match(/^[0-9]+$/)
-                    ? error === ''
-                    ? <AlertStripeFeil>{returverdi} :(</AlertStripeFeil>
+                  error === ''
+                    ? <AlertStripeSuksess>Aktør-ID: {returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                    : <AlertStripeSuksess>Aktør-ID: {returverdi}</AlertStripeSuksess>
                 : <React.Fragment/>}
               </Side>
         </React.Fragment>

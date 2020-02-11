@@ -24,13 +24,12 @@ export function useInput({ label, initialState="", tips="" }) {
     return [value, input, setValue];
 }
 
-export function fetchStatusHandler(response) {
-    if (response.status === 200) {
-        return response;
-    } else {
-        throw new Error(response.statusText);
-    }
-}
+export const parseFetchResponse = (response, parser) => {
+  return response[parser]().then(obj => ({
+          body: obj,
+          meta: response
+        }));
+};
 
 export function useGet() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -39,17 +38,18 @@ export function useGet() {
 
     const get = (url) => {
         fetch(url)
-            .then(fetchStatusHandler)
-            .then(res => res.text())
+            .then(res => parseFetchResponse(res, "text"))
             .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-                setError("");
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-                setReturverdi("");
+              console.log(res);
+              if (res.meta.status === 200) {
+                  setReturverdi(res.body);
+                  setError("");
+                  setIsLoaded(true)
+                } else {
+                  res.body === "" ? setError(res.meta.statusText) : setError(res.body)
+                  setReturverdi("");
+                  setIsLoaded(true)
+                }
             });
     };
 
@@ -63,21 +63,21 @@ export function useJsonGet() {
 
     const get = (url) => {
         fetch(url)
-            .then(fetchStatusHandler)
-            .then(res => res.json())
+            .then(res => parseFetchResponse(res, "json"))
             .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-                setError("");
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-                setReturverdi("");
+              if (res.meta.status === 200) {
+                  setReturverdi(res.body);
+                  setError("");
+                  setIsLoaded(true);
+                } else {
+                  setReturverdi("");
+                  setError(res.body);
+                  setIsLoaded(true);
+                }
             });
     };
 
-    return [get, isLoaded, returverdi, error];
+    return [get, isLoaded, returverdi, error, setReturverdi];
 }
 
 export function useFormPost() {
@@ -90,17 +90,17 @@ export function useFormPost() {
             method: "POST",
             body: formdata
         })
-            .then(fetchStatusHandler)
-            .then(res => res.text())
+            .then(res => parseFetchResponse(res, "text"))
             .then(res => {
-                setIsLoaded(true);
-                setReturverdi(res);
-                setError("");
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-                setReturverdi("");
+              if (res.meta.status === 200) {
+                  setReturverdi(res.body);
+                  setError("");
+                  setIsLoaded(true);
+                } else {
+                  setReturverdi("");
+                  setError(res.body);
+                  setIsLoaded(true);
+                }
             });
     };
 

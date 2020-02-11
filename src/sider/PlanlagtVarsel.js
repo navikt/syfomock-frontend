@@ -5,39 +5,16 @@ import {Knapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
-import {fetchStatusHandler} from "../hooks";
+import {parseFetchResponse, useJsonGet} from "../hooks";
 import Side from "../components/Side/Side";
 
-const useGetVarsel = () => {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [varsel, setVarsel] = useState([]);
-    const [error, setError] = useState('');
-
-    const get = () => {
-        fetch(API_URL + "/planlagtVarsel")
-            .then(fetchStatusHandler)
-            .then(res => res.json())
-            .then((data) => {
-                setIsLoaded(true);
-                setVarsel(data);
-                setError("");
-            })
-            .catch(error => {
-                setIsLoaded(true);
-                setError(error.toString());
-                setVarsel([]);
-            });
-    };
-
-    return [get, isLoaded, varsel, error, setVarsel];
-};
-
 export default function PlanlagtVarsel() {
-    const [getVarsel, varselLoaded, varsel, varselError, setVarsel] = useGetVarsel();
+    const [getVarsel, varselLoaded, varsel, varselError, setVarsel] = useJsonGet();
     const [oppdatering, setOppdatering] = useState("");
 
     useEffect(() => {
-        getVarsel();
+        getVarsel(API_URL + "/planlagtVarsel");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleInput = (event) => {
@@ -52,10 +29,9 @@ export default function PlanlagtVarsel() {
         method: "POST",
         body: new URLSearchParams({sendingsdato: varselObjekt.sendingsdato})
       })
-        .then(fetchStatusHandler)
-        .then(res => res.text())
+        .then(res => parseFetchResponse(res, "text"))
         .then((res) => {
-          setOppdatering(res);
+          setOppdatering(res.body);
         })
     }
 
