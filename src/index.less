@@ -20,7 +20,7 @@
   padding: 3rem 1rem;
   grid-area: main;
   display: flex;
-  place-self: center;
+  place-self: start;
   flex-direction: column;
   width: 100vw;
   height: 100%;
@@ -31,9 +31,8 @@
   #root {
     grid-template-columns: 30vw 60vw;
     grid-template-rows: 5vh 95vh;
-    grid-template-areas: "header header"
+    grid-template-areas: "header main"
     "l-sidebar main"
-    "r-sidebar main"
   }
   .main {
     width: 50vw;
@@ -48,18 +47,16 @@
 
 @media (min-width: 1000px) {
   #root {
-    grid-template-columns: 20vw 30vw 30vw 20vw;
+    grid-template-columns: 15vw 85vw;
     grid-template-rows: 5vh 95vh;
     grid-template-areas:
-            "header main main r-sidebar"
-            "l-sidebar main main r-sidebar"
+            "header main"
+            "l-sidebar main"
   }
     .main {
       width: 40vw;
     }
 }
-
-
 
 .sentrert {
   place-self: center;
