@@ -5,7 +5,7 @@ import {Checkbox, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
-import Lukknapp from "nav-frontend-lukknapp";
+import {Lukknapp} from 'nav-frontend-ikonknapper';
 import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
 import {useFormPost, useInput, useLocalStorage, useLocalStorageInput, useFlatpicker} from "../hooks";
@@ -251,6 +251,9 @@ export default function OpprettSykmelding() {
                             periode</Lukknapp> : null}
                     </div>
                     <div className="flex-container">
+                        <div className="flex-container">
+                            <label className="skjemaelement__label" htmlFor={"periode" + (idx+1)}>Datoperiode</label>
+                        </div>
                         <Flatpickr
                             name={"periode" + (idx+1)}
                             value={[periode.fom, periode.tom]}
