@@ -30,7 +30,7 @@ function antallPeriodeDager(perioder) {
 
 function finnTidligsteDag(perioder) {
     return moment(Math.min(...perioder
-        .map(periode => moment(new Date(periode.fom)))))
+        .map(periode => moment(periode.fom))))
         .format("YYYY-MM-DD");
 }
 
@@ -245,14 +245,14 @@ export default function OpprettSykmelding() {
                                name={"fom" + (idx + 1)}
                                key={"fom" + (idx + 1)}
 
-                               value={periode.fom}
+                               defaultValue={periode.fom}
                                onChange={handlePeriodeChange}
                         />
                         <Input label="Til"
                                name={"tom" + (idx + 1)}
                                key={"tom" + (idx + 1)}
                                className="flex--end"
-                               value={periode.tom}
+                               defaultValue={periode.tom}
                                onChange={handlePeriodeChange}
                         />
                     </div>

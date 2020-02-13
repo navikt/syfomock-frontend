@@ -17,7 +17,7 @@ export function useInput({ label, initialState="", tips="" }) {
             type="text"
             className="skjemaelement__input input--fullbredde"
             id={inputId}
-            value={value}
+            defaultValue={value}
             onChange={e => setValue(e.target.value)}
         />
     </div>);
@@ -109,7 +109,7 @@ export function useFormPost() {
 
 export function useLocalStorageInput({label, key, initialState=""}) {
     const [value, setValue] = useLocalStorage(key, initialState);
-    const input = <Input label={label} value={value} onChange={e => setValue(e.target.value)} />;
+    const input = <Input label={label} defaultValue={value} onChange={e => setValue(e.target.value)} />;
     return [value, input, setValue];
 }
 

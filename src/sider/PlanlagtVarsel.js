@@ -50,7 +50,7 @@ export default function PlanlagtVarsel() {
                 {varsel.map(varsel =>
                     <tr key={varsel.id}>
                         <td>{varsel.id}</td>
-                        <td><Input value={varsel.sendingsdato} name={`${varsel.id}`} label="" onChange={handleInput}></Input><Knapp name={varsel.id}
+                        <td><Input defaultValue={varsel.sendingsdato} name={`${varsel.id}`} label="" onChange={handleInput}/><Knapp name={varsel.id}
                                                                                                                                     onClick={handleSend}>Oppdater</Knapp></td>
                         <td>{varsel.type}</td>
                         <td>{varsel.bruker}</td>
