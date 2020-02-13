@@ -28,7 +28,7 @@ export default function FinnArbtakereHosOrgnr() {
                 error === '' ?
                     <AlertStripeSuksess>{returverdi}</AlertStripeSuksess> :
                     <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 

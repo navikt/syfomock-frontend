@@ -26,7 +26,7 @@ export default function FinnAktorId() {
                 error === ''
                     ? <AlertStripeSuksess>Aktør-ID: {returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 }

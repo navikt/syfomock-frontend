@@ -29,7 +29,7 @@ export default function Aktivitetskrav() {
             {isLoaded ?
                 error === '' ? <code>{returverdi}</code>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 }

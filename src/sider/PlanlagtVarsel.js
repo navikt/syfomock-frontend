@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Input} from "nav-frontend-skjema";
 import {Knapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {parseFetchResponse, useJsonGet} from "../hooks";
 import Side from "../components/Side/Side";
+import Flatpickr from 'react-flatpickr';
+import {Norwegian} from 'flatpickr/dist/l10n/no.js'
+import '../components/Pickr/flatpickr.less';
+import moment from "moment";
 
 export default function PlanlagtVarsel() {
     const [getVarsel, varselLoaded, varsel, varselError, setVarsel] = useJsonGet();
@@ -16,10 +19,10 @@ export default function PlanlagtVarsel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleInput = (event) => {
-        const nextVarsel = varsel.map(o => o.id === parseInt(event.target.id, 10) ? {...o, sendingsdato: event.target.value} : o)
+    const handleInput = (dato, id) => {
+        const nextVarsel = varsel.map(o => o.id === id ? {...o, sendingsdato: moment(dato[0]).format("YYYY-MM-DD")} : o);
         setVarsel(nextVarsel);
-    }
+    };
 
     const handleSend = (event) => {
         event.preventDefault();
@@ -32,7 +35,7 @@ export default function PlanlagtVarsel() {
             .then((res) => {
                 setOppdatering(res.body);
             })
-    }
+    };
 
     const renderTabell = () => {
         return (
@@ -50,8 +53,26 @@ export default function PlanlagtVarsel() {
                 {varsel.map(varsel =>
                     <tr key={varsel.id}>
                         <td>{varsel.id}</td>
-                        <td><Input defaultValue={varsel.sendingsdato} name={`${varsel.id}`} label="" onChange={handleInput}/><Knapp name={varsel.id}
-                                                                                                                                    onClick={handleSend}>Oppdater</Knapp></td>
+                        <td>
+                            <Flatpickr
+                                name={varsel.id}
+                                onChange={o => handleInput(o, varsel.id)}
+                                value={varsel.sendingsdato}
+                                className="skjemaelement__input input--s"
+                                placeholder="dd.mm.yyyy"
+                                options={{
+                                    mode: 'single',
+                                    enableTime: false,
+                                    dateFormat: 'Y-m-d',
+                                    altInput: true,
+                                    altFormat: 'd.m.Y',
+                                    locale: Norwegian,
+                                    allowInput: true
+                                }}
+                            />
+                            <Knapp name={varsel.id}
+                                   onClick={handleSend}>Oppdater</Knapp>
+                        </td>
                         <td>{varsel.type}</td>
                         <td>{varsel.bruker}</td>
                         <td>{varsel.ressursId}</td>
@@ -64,11 +85,11 @@ export default function PlanlagtVarsel() {
 
     return (
         <Side tittel={Sider.PLANLAGT_VARSEL.tittel}>
-            {oppdatering !== '' ? <AlertStripeInfo>{oppdatering}</AlertStripeInfo> : <React.Fragment/>}
+            {oppdatering !== '' ? <AlertStripeInfo>{oppdatering}</AlertStripeInfo> : null}
             {varselLoaded ?
                 varselError === '' ? renderTabell()
                     : <AlertStripeFeil>{varselError}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 };

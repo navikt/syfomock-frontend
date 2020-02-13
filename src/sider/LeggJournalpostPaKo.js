@@ -25,7 +25,7 @@ export default function LeggJournalpostPaKo() {
             {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 }

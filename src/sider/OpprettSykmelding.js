@@ -1,24 +1,27 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import moment from 'moment';
 import {Undertekst, Undertittel} from "nav-frontend-typografi";
-import {Checkbox, Input, Select, SkjemaGruppe} from "nav-frontend-skjema";
+import {Checkbox, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import Lukknapp from "nav-frontend-lukknapp";
 import {API_URL} from "../App";
 import SelectSearch from 'react-select-search'
-import {useFormPost, useInput, useLocalStorage, useLocalStorageInput} from "../hooks";
+import {useFormPost, useInput, useLocalStorage, useLocalStorageInput, useFlatpicker} from "../hooks";
 import {Sider} from "../sider";
 import Side from "../components/Side/Side";
+import Flatpickr from 'react-flatpickr';
+import { Norwegian } from 'flatpickr/dist/l10n/no.js'
+import '../components/Pickr/flatpickr.less';
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function dagDiff(fom, tom) {
-    let fomDate = moment(new Date(fom));
-    let tomDate = moment(new Date(tom));
+    let fomDate = moment(fom);
+    let tomDate = moment(tom);
     return tomDate.diff(fomDate, 'days') + 1;
 }
 
@@ -37,10 +40,10 @@ function finnTidligsteDag(perioder) {
 
 export default function OpprettSykmelding() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
-    const startdato = moment().subtract(7, 'days').format("YYYY-MM-DD");
-    const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useInput({label: "Startdato på syketilfelle", initialState: startdato, tips: "Felt 0"});
-    const [identdato, identdatoInput, setIdentdato] = useInput({label: "Identdato", initialState: startdato, tips: "Fra Infotrygd"});
-    const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useInput({label: "Behandlingsdato", initialState: startdato, tips: "Også kalt utstedelsesdato"});
+    const startdato = moment().subtract(7, 'days');
+    const [syketilfelleStartDato, syketilfelleInput, setSyketilfelleStartDato] = useFlatpicker({label: "Startdato på syketilfelle", initialState: startdato, tips: "Felt 0"});
+    const [identdato, identdatoInput, setIdentdato] = useFlatpicker({label: "Identdato", initialState: startdato, tips: "Fra Infotrygd"});
+    const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useFlatpicker({label: "Behandlingsdato", initialState: startdato, tips: "Også kalt utstedelsesdato"});
     const eid = randomInteger(1000000000, 99999999999);
     const [msgid, msgidInput] = useInput({label: "msgId", initialState: randomInteger(1000000000, 99999999999), tips: "For sporing i loggene!"});
     const [diagnosekode, setDiagnosekode] = useState("L87");
@@ -48,11 +51,11 @@ export default function OpprettSykmelding() {
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "02125922395"});
     const [manglendeTilretteleggingPaaArbeidsplassen, setManglendeTilretteleggingPaaArbeidsplassen] = useState(false);
     const [perioder, setPerioder] = useState([{
-        "fom": startdato,
+        "fom": startdato.format("YYYY-MM-DD"),
         "tom": moment().subtract(1, 'days').format("YYYY-MM-DD"),
         "type": "HUNDREPROSENT"
     }]);
-    const [kontaktdato, kontaktdatoInput] = useInput({label: "Tilbakedatering: Kontaktdato", tips: "YYYY-MM-DD, f.eks. " + moment().format("YYYY-MM-DD")});
+    const [kontaktdato, kontaktdatoInput] = useFlatpicker({label: "Tilbakedatering: Kontaktdato", initialState: "", optional:true});
     const [begrunnikkekontakt, begrunnikkekontaktInput] = useInput({label: "Tilbakedatering: Begrunnelse"});
     const [periodedager, setPeriodedager] = useState(antallPeriodeDager(perioder));
     const [simple, setSimple] = useLocalStorage('simple-mode', true);
@@ -62,14 +65,16 @@ export default function OpprettSykmelding() {
         setManglendeTilretteleggingPaaArbeidsplassen(!manglendeTilretteleggingPaaArbeidsplassen);
     }, [manglendeTilretteleggingPaaArbeidsplassen]);
 
-    const handlePeriodeChange = (event) => {
-        let idx = event.target.name[event.target.name.length - 1] - 1;
-        let name = event.target.name.slice(0, -1);
-        let nyePerioder = perioder;
-        nyePerioder[idx][name] = event.target.value;
-        let dager = antallPeriodeDager(nyePerioder);
-        setPeriodedager(dager);
-        setPerioder(nyePerioder);
+    const handlePeriodeChange = (event, idx) => {
+        if (event.length === 2) {
+            console.log(event, idx);
+            let nyePerioder = perioder;
+            nyePerioder[idx].fom = moment(event[0]).format("YYYY-MM-DD");
+            nyePerioder[idx].tom = moment(event[1]).format("YYYY-MM-DD");
+            let dager = antallPeriodeDager(nyePerioder);
+            setPeriodedager(dager);
+            setPerioder(nyePerioder);
+        }
     };
 
     const fjernPeriode = (event) => {
@@ -157,6 +162,11 @@ export default function OpprettSykmelding() {
         post(API_URL + "/nyttmottak/sykmelding/opprett/", data);
     };
 
+    useEffect(() => {
+        setTimeout(() => setIsLoaded(false), 3000);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoaded]);
+
     return <Side>
         <div className="flex-container">
             <Undertittel>{Sider.OPPRETT_SYKMELDING.tittel}</Undertittel>
@@ -175,11 +185,11 @@ export default function OpprettSykmelding() {
             ? <AlertStripeInfo className="blokk-xs">Vær klar over tilbakedatering uten begrunnelse!
                 <p className="blokk-xxxs">Startdato på syketilfelle er senere enn tidligste dag registrert i periodene.</p>
             </AlertStripeInfo>
-            : <React.Fragment/>}
+            : null}
         <form onSubmit={handleSubmit}>
             {fnrInput}
             {!simple &&
-            <React.Fragment>
+            <>
                 {syketilfelleInput}
                 {identdatoInput}
                 {utstedelsesdatoInput}
@@ -227,7 +237,7 @@ export default function OpprettSykmelding() {
                 {kontaktdatoInput}
                 {begrunnikkekontaktInput}
                 {msgidInput}
-            </React.Fragment>
+            </>
             }
             <div className="flex-container">
                 <Knapp className="blokk-xs" htmlType="button" onClick={addPeriode}>Legg til periode</Knapp>
@@ -238,22 +248,24 @@ export default function OpprettSykmelding() {
                     <div className="flex-container">
                         <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
                         {idx > 0 ? <Lukknapp className="flex--end" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
-                            periode</Lukknapp> : <React.Fragment/>}
+                            periode</Lukknapp> : null}
                     </div>
                     <div className="flex-container">
-                        <Input label="Fra"
-                               name={"fom" + (idx + 1)}
-                               key={"fom" + (idx + 1)}
-
-                               defaultValue={periode.fom}
-                               onChange={handlePeriodeChange}
-                        />
-                        <Input label="Til"
-                               name={"tom" + (idx + 1)}
-                               key={"tom" + (idx + 1)}
-                               className="flex--end"
-                               defaultValue={periode.tom}
-                               onChange={handlePeriodeChange}
+                        <Flatpickr
+                            name={"periode" + (idx+1)}
+                            value={[periode.fom, periode.tom]}
+                            onChange={o => handlePeriodeChange(o, idx)}
+                            className="skjemaelement__input input--fullbredde"
+                            placeholder="dd.mm.yyyy til dd.mm.yyyy"
+                            options={{
+                                mode: 'range',
+                                enableTime: false,
+                                dateFormat: 'Y-m-d',
+                                altInput: true,
+                                altFormat: 'd.m.Y',
+                                locale: Norwegian,
+                                allowInput: true,
+                            }}
                         />
                     </div>
                     <Select label="Type"
@@ -283,6 +295,6 @@ export default function OpprettSykmelding() {
             error === '' ?
                 <AlertStripeSuksess>{returverdi.replace(/<\/?[^>]+(>|$)/g, "")}</AlertStripeSuksess>
                 : <AlertStripeFeil>{error}</AlertStripeFeil>
-            : <React.Fragment/>}
+            : null}
     </Side>;
 }

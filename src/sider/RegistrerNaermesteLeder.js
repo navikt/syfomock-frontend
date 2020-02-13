@@ -4,7 +4,7 @@ import {Hovedknapp} from "nav-frontend-knapper";
 import {API_URL} from "../App";
 import moment from "moment";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
-import {useGet, useInput, useLocalStorageInput} from "../hooks";
+import {useFlatpicker, useGet, useInput, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
 import Side from "../components/Side/Side";
 
@@ -14,7 +14,7 @@ export default function RegistrerNaermesteLeder() {
     const [lederFnr, lederFnrInput] = useInput({label: "Fødselsnummer til ny nærmeste leder"});
     const [telefonnummer, telefonnummerInput] = useInput({label: "Telefonnummer til ny nærmeste leder"});
     const [epost, epostInput] = useInput({label: "E-post til ny nærmeste leder"});
-    const [aktivFom, aktivFomInput] = useInput({label: "Aktiv fra og med", initialState: moment().format("DD.MM.YYYY")});
+    const [aktivFom, aktivFomInput] = useFlatpicker({label: "Aktiv fra og med", initialState: moment(), pickrFormat: "d.m.Y", momentFormat: "DD.MM.YYYY"});
     const [agForskutterer, setAgForskutterer] = useState(false);
     const [get, isLoaded, returverdi, error] = useGet();
 
@@ -51,7 +51,7 @@ export default function RegistrerNaermesteLeder() {
             {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 }

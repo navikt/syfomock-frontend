@@ -24,7 +24,7 @@ export default function NullstillOppfolgingsdialog() {
             {isLoaded ?
                 error === '' ? <AlertStripeSuksess>{returverdi}!</AlertStripeSuksess>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 }

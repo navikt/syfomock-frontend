@@ -27,7 +27,7 @@ export default function FinnFnr() {
                     ? <AlertStripeFeil>{returverdi} :(</AlertStripeFeil>
                     : <AlertStripeFeil>{error}</AlertStripeFeil>
                     : <AlertStripeSuksess>Fødselsnummer: {returverdi}</AlertStripeSuksess>
-                : <React.Fragment/>}
+                : null}
         </Side>
     );
 }
