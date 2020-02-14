@@ -3,15 +3,15 @@ import {Hovedknapp} from "nav-frontend-knapper";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import {Sider} from "../sider";
 import {API_URL} from "../App";
-import {useGet, useInput} from "../hooks";
+import {useFlatpicker, useGet, useInput} from "../hooks";
 import moment from "moment";
 import Side from "../components/Side/Side";
 
 export default function EndreOppfolgingsdialog() {
     const [oppfolgingsdialogId, oppfolgingsdialogIdInput] = useInput({label: "Oppfølgingsdialog-ID"});
-    const [fom, fomInput] = useInput({label: "Fom", initialState: moment().subtract(7, "days").format("DD.MM.YYYY")});
-    const [tom, tomInput] = useInput({label: "Tom", initialState: moment().format("DD.MM.YYYY")});
-    const [evalueres, evalueresInput] = useInput({label: "Evalueres", initialState: moment().format("DD.MM.YYYY")});
+    const [fom, fomInput] = useFlatpicker({label: "Fom", initialState: moment().subtract(7, "days"), pickrFormat: "d.m.Y", momentFormat: "DD.MM.YYYY"});
+    const [tom, tomInput] = useFlatpicker({label: "Tom", initialState: moment(), pickrFormat: "d.m.Y", momentFormat: "DD.MM.YYYY"});
+    const [evalueres, evalueresInput] = useFlatpicker({label: "Evalueres", initialState: moment(), pickrFormat: "d.m.Y", momentFormat: "DD.MM.YYYY"});
     const [get, isLoaded, returverdi, error] = useGet();
 
     const handleSubmit = (event) => {
