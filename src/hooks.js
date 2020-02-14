@@ -47,11 +47,7 @@ export function useFlatpicker({label, initialState = new Date(), tips = "", opti
             <div className="flex-container">
                 <Flatpickr
                     name={inputId}
-                    onChange={o => {
-                        console.log(o);
-                        setValue(moment(o[0]).format(momentFormat));
-
-                    }}
+                    onChange={o => setValue(moment(o[0]).format(momentFormat))}
                     value={value}
                     className="skjemaelement__input input--fullbredde"
                     placeholder="dd.mm.yyyy"

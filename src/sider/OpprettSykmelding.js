@@ -67,7 +67,6 @@ export default function OpprettSykmelding() {
 
     const handlePeriodeChange = (event, idx) => {
         if (event.length === 2) {
-            console.log(event, idx);
             let nyePerioder = perioder;
             nyePerioder[idx].fom = moment(event[0]).format("YYYY-MM-DD");
             nyePerioder[idx].tom = moment(event[1]).format("YYYY-MM-DD");
@@ -77,9 +76,8 @@ export default function OpprettSykmelding() {
         }
     };
 
-    const fjernPeriode = (event) => {
+    const fjernPeriode = (event, idx) => {
         event.preventDefault();
-        let idx = event.target.name[event.target.name.length - 1] - 1;
         let nyePerioder = perioder;
         console.log(idx);
         nyePerioder.splice(idx, 1);
@@ -247,7 +245,7 @@ export default function OpprettSykmelding() {
                 <SkjemaGruppe key={"periode" + (idx + 1)} className="panel panel--border blokk-xs">
                     <div className="flex-container">
                         <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
-                        {idx > 0 ? <Lukknapp className="flex--end" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode} /> : null}
+                        {idx > 0 ? <Lukknapp className="flex--end" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={ev => fjernPeriode(ev, idx)} /> : null}
                     </div>
                     <div className="flex-container">
                         <Flatpickr
