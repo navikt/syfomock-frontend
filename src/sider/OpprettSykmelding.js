@@ -251,9 +251,6 @@ export default function OpprettSykmelding() {
                             periode</Lukknapp> : null}
                     </div>
                     <div className="flex-container">
-                        <div className="flex-container">
-                            <label className="skjemaelement__label" htmlFor={"periode" + (idx+1)}>Datoperiode</label>
-                        </div>
                         <Flatpickr
                             name={"periode" + (idx+1)}
                             value={[periode.fom, periode.tom]}
