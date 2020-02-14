@@ -247,15 +247,14 @@ export default function OpprettSykmelding() {
                 <SkjemaGruppe key={"periode" + (idx + 1)} className="panel panel--border blokk-xs">
                     <div className="flex-container">
                         <div className="periodetittel skjemaelement__sporsmal">{"Periode " + (idx + 1)}</div>
-                        {idx > 0 ? <Lukknapp className="flex--end" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode}>Fjern
-                            periode</Lukknapp> : null}
+                        {idx > 0 ? <Lukknapp className="flex--end" key={"fjern" + (idx + 1)} name={"fjern" + (idx + 1)} onClick={fjernPeriode} /> : null}
                     </div>
                     <div className="flex-container">
                         <Flatpickr
                             name={"periode" + (idx+1)}
                             value={[periode.fom, periode.tom]}
                             onChange={o => handlePeriodeChange(o, idx)}
-                            className="skjemaelement__input input--fullbredde"
+                            className="skjemaelement__input input--fullbredde blokk-xs"
                             placeholder="dd.mm.yyyy til dd.mm.yyyy"
                             options={{
                                 mode: 'range',
