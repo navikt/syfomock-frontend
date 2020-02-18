@@ -76,6 +76,12 @@ export default function OpprettSykmelding() {
         }
     };
 
+    const handleTypeChange = (event, idx) => {
+        let nyePerioder = perioder;
+        nyePerioder[idx].type = event.target.value;
+        setPerioder(nyePerioder);
+    };
+
     const fjernPeriode = (event, idx) => {
         event.preventDefault();
         let nyePerioder = perioder;
@@ -269,7 +275,7 @@ export default function OpprettSykmelding() {
                             name={"type" + (idx + 1)}
                             key={"type" + (idx + 1)}
                             selected={periode.type}
-                            onChange={handlePeriodeChange}
+                            onChange={ev => handleTypeChange(ev, idx)}
                             className="egenstaende"
                     >
                         <option key='HUNDREPROSENT' value='HUNDREPROSENT'>100%</option>
