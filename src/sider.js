@@ -21,9 +21,11 @@ import EndreOppfolgingsdialog from "./sider/EndreOppfolgingsdialog";
 import SettLegacyFelter from "./sider/SettLegacyFelter";
 import LeggJournalpostPaKo from "./sider/LeggJournalpostPaKo";
 import PlanlagtVarsel from "./sider/PlanlagtVarsel";
+import OpprettLegeerklearing from "./sider/OpprettLegeerklearing";
 
 export const Sider = {
     OPPRETT_SYKMELDING: {tittel: "Opprett sykmelding", path: "/opprett_sykmelding", komponent: <OpprettSykmelding/>},
+    OPPRETT_LEGEERKLEARING: {tittel: "Opprett Legeerklæring", path: "/opprett_legeerklearing", komponent: <OpprettLegeerklearing/>},
     FINN_AKTORID: {tittel: "Finn aktør-ID fra fødselsnummer", path: "/finn_aktorid", komponent: <FinnAktorId/>},
     FINN_FNR: {tittel: "Finn fødselsnummer fra aktør-ID", path: "/finn_fnr", komponent: <FinnFnr/>},
     NULLSTILL_SYKMELDT: {tittel: "Nullstill sykmeldt", path: "/nullstill_sykmeldt", komponent: <NullstillSykmeldt/>},
