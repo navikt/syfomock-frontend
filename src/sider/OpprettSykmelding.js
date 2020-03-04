@@ -46,6 +46,7 @@ export default function OpprettSykmelding() {
     const [utstedelsesdato, utstedelsesdatoInput, setUtstedelsesdato] = useFlatpicker({label: "Behandlingsdato", initialState: startdato, tips: "Også kalt utstedelsesdato"});
     const eid = randomInteger(1000000000, 99999999999);
     const [msgid, msgidInput] = useInput({label: "msgId", initialState: randomInteger(1000000000, 99999999999), tips: "For sporing i loggene!"});
+    const [herid, heridInput] = useInput({label: "herId", initalState: "", tips: "For å slå opp riktig samhandler i TSS/Sar"});
     const [diagnosekode, setDiagnosekode] = useState("L87");
     const [smtype, setSmtype] = useState("SM2013");
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "01117302624"});
@@ -145,6 +146,7 @@ export default function OpprettSykmelding() {
             identdato: idato,
             utstedelsesdato: udato,
             msgid,
+            herid,
             diagnosekode,
             legefnr,
             smtype,
@@ -241,6 +243,7 @@ export default function OpprettSykmelding() {
                 {kontaktdatoInput}
                 {begrunnikkekontaktInput}
                 {msgidInput}
+                {heridInput}
             </>
             }
             <div className="flex-container">
