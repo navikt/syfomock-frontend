@@ -414,6 +414,7 @@ export const Diagnoser = {
     R97: "Allergisk rinitt",
     R98: "Hyperventileringssyndrom",
     R99: "Luftveissykdom IKA",
+    R991: "Covid-19",
     S01: "Smerte/ømhet hud",
     S02: "Hudkløe",
     S03: "Vorter",
