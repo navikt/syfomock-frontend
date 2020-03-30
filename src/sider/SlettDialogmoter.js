@@ -12,7 +12,7 @@ export default function NullstillDialogmoter() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        get(API_URL + "/motebehov/slett/person?fnr=" + fnr);
+        get(API_URL + "/slettmoter?fnr=" + fnr);
     };
 
     return (
