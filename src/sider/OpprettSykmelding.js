@@ -49,6 +49,7 @@ export default function OpprettSykmelding() {
     const [herid, heridInput] = useInput({label: "herId", initalState: "", tips: "For å slå opp riktig samhandler i TSS/Sar"});
     const [diagnosekode, setDiagnosekode] = useState("L87");
     const [smtype, setSmtype] = useState("SM2013");
+    const [annenFravaersaarsak, setAnnenFravarsarsak] = useState("");
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "01117302624"});
     const [manglendeTilretteleggingPaaArbeidsplassen, setManglendeTilretteleggingPaaArbeidsplassen] = useState(false);
     const [perioder, setPerioder] = useState([{
@@ -152,7 +153,8 @@ export default function OpprettSykmelding() {
             smtype,
             manglendeTilretteleggingPaaArbeidsplassen,
             kontaktdato,
-            begrunnikkekontakt
+            begrunnikkekontakt,
+            annenFravaersaarsak
         });
         for (let i = 0; i < perioder.length; i++) {
             let idx = i + 1;
@@ -233,6 +235,27 @@ export default function OpprettSykmelding() {
                     <option key="SM2013_Påfølgende_39uker" value="SM2013_Påfølgende_39uker">SM2013_Påfølgende_39uker (V2)</option>
                     <option key="SM2013_Påfølgende_39uker_med_AAP" value="SM2013_Påfølgende_39uker_med_AAP">SM2013_Påfølgende_39uker_med_AAP (V2)</option>
                 </Select>
+
+                <Select label="Annen fraværsårsak"
+                        value={annenFravaersaarsak}
+                        name="annenFravaersaarsak"
+                        key="annenFravaersaarsak"
+                        onChange={e => setAnnenFravarsarsak(e.target.value)}
+                >
+                    <option key="FRAVAER_0" value="">Ingen</option>
+                    <option key="FRAVAER_1" value="1">Når vedkommende er innlagt i en godkjent helseinstitusjon</option>
+                    <option key="FRAVAER_2" value="2">Når vedkommende er under behandling og legen erklærer at behandlingen gjør det nødvendig at vedkommende ikke arbeider</option>
+                    <option key="FRAVAER_3" value="3">Når vedkommende deltar på et arbeidsrettet tiltak</option>
+                    <option key="FRAVAER_4" value="4">Når vedkommende på grunn av sykdom, skade eller lyte får tilskott når vedkommende på grunn av sykdom, skade eller lyte får tilskott</option>
+                    <option key="FRAVAER_5" value="5">Når vedkommende er til nødvendig kontrollundersøkelse som krever minst 24 timers fravær, reisetid medregnet</option>
+                    <option key="FRAVAER_6" value="6">Når vedkommende myndighet har nedlagt forbud mot at han eller hun arbeider på grunn av smittefare</option>
+                    <option key="FRAVAER_7" value="7">Når vedkommende er arbeidsufør som følge av svangerskapsavbrudd</option>
+                    <option key="FRAVAER_8" value="8">Når vedkommende er arbeidsufør som følge av behandling for barnløshet</option>
+                    <option key="FRAVAER_9" value="9">Når vedkommende er donor eller er under vurdering som donor</option>
+                    <option key="FRAVAER_10" value="10">Når vedkommende er arbeidsufør som følge av behandling i forbindelse med sterilisering</option>
+                </Select>
+
+
                 <Checkbox
                     label="Manglende tilrettelegging på arbeidsplassen"
                     name="manglendeTilretteleggingPaaArbeidsplassen"
