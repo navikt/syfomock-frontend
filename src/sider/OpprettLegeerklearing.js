@@ -25,6 +25,7 @@ export default function OpprettLegeerklearing() {
     const [diagnosekode, setDiagnosekode] = useState("L87");
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "01117302624"});
     const [post, isLoaded, returverdi, error, setIsLoaded] = useFormPost();
+    const [statuspresens, statuspresensInput] = useInput({label: "statuspresens"});
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -34,7 +35,8 @@ export default function OpprettLegeerklearing() {
             eid,
             msgid,
             diagnosekode,
-            legefnr
+            legefnr,
+            statuspresens
         });
 
         post(API_URL + "/legerklaring/opprett/", data);
@@ -73,6 +75,7 @@ export default function OpprettLegeerklearing() {
                     </div>
                     {legefnrInput}
                     {msgidInput}
+                    {statuspresensInput}
                 </>
             }
             <Hovedknapp htmlType="button" onClick={handleSubmit} className='blokk-xs'>Send Legeerklearing</Hovedknapp>
