@@ -34,7 +34,7 @@ export default function OpprettPapirsykmelding() {
             "</skanningmetadata>"});
 
 
-    const [post, isLoaded, returverdi, error, setIsLoaded, setError] = useFormPost();
+    const [post, isLoaded, returverdi, error, setIsLoaded] = useFormPost();
 
     const handleSubmit = (event) => {
         event.preventDefault();
