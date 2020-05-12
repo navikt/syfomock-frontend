@@ -22,6 +22,7 @@ import SettLegacyFelter from "./sider/SettLegacyFelter";
 import LeggJournalpostPaKo from "./sider/LeggJournalpostPaKo";
 import PlanlagtVarsel from "./sider/PlanlagtVarsel";
 import OpprettLegeerklearing from "./sider/OpprettLegeerklearing";
+import Dialogmelding from "./sider/Dialogmelding";
 
 export const Sider = {
     OPPRETT_SYKMELDING: {tittel: "Opprett sykmelding", path: "/opprett_sykmelding", komponent: <OpprettSykmelding/>},
@@ -46,5 +47,6 @@ export const Sider = {
     PLANLAGT_VARSEL: {tittel: "Planlagt varsel", path: "/planlagt_varsel", komponent: <PlanlagtVarsel/>},
     SETT_LEGACY_I_TILTAK: {tittel: "Sett legacyfelter i tiltak", path: "/sett_legacy_i_tiltak", komponent: <SettLegacyFelter/>},
     LEGG_JOURNALPOST_PA_KO: {tittel: "Legg journalpost (inntektsmelding) på kø", path: "/legg_journalpost_pa_ko", komponent: <LeggJournalpostPaKo/>},
-    TESTBRUKERE_STATUS: {tittel: "Testbrukere oversikt", path: "/testbrukere", komponent: <Testbrukere/>}
+    TESTBRUKERE_STATUS: {tittel: "Testbrukere oversikt", path: "/testbrukere", komponent: <Testbrukere/>},
+    DIALOGMELDING: {tittel: "Dialogmelding", path: "/dialogmelding", komponent: <Dialogmelding />},
 };
