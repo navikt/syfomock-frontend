@@ -57,8 +57,6 @@ export default function OpprettPapirsykmelding() {
         </div>
         <form onSubmit={handleSubmit}>
             {ocrInput}
-            }
-
             <Hovedknapp htmlType="button" onClick={handleSubmit} className='blokk-xs'>Opprett papirsykmelding</Hovedknapp>
         </form>
         {isLoaded ?
