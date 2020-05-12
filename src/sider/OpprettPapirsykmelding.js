@@ -10,7 +10,8 @@ import '../components/Pickr/flatpickr.less';
 
 
 export default function OpprettPapirsykmelding() {
-    const [ocr, ocrInput] = useInput({label: "OCR-fil", initialState: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+    const [ocr, ocrInput] = useInput({
+        label: "OCR-fil", initialState: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<skanningmetadata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"skanning_meta.xsd\">\n" +
             "    <sykemeldinger>\n" +
             "        <pasient>\n" +
@@ -31,7 +32,8 @@ export default function OpprettPapirsykmelding() {
             "            <HPR>7125186</HPR>\n" +
             "        </behandler>\n" +
             "    </sykemeldinger>\n" +
-            "</skanningmetadata>"});
+            "</skanningmetadata>"
+    });
 
 
     const [post, isLoaded, returverdi, error, setIsLoaded] = useFormPost();
