@@ -48,8 +48,7 @@ export default function OpprettPapirsykmelding() {
 
     useEffect(() => {
         setTimeout(() => setIsLoaded(false), 3000);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoaded]);
+    }, [isLoaded, setIsLoaded]);
 
     return <Side>
         <div className="flex-container">
