@@ -36,7 +36,7 @@ export default function OpprettPapirsykmelding() {
         initialState: startdato,
         tips: "Felt 0"
     });
-    const [hpr, hprInput] = useInput({label: "HPR-nummer", initalState: "7125186"});
+    const [hpr, hprInput] = useInput({label: "HPR-nummer", initialState: "7125186"});
     const [diagnosekode, setDiagnosekode] = useState("S52.5");
     const [perioder, setPerioder] = useState([{
         "fom": startdato.format("YYYY-MM-DD"),
