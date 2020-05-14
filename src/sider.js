@@ -23,10 +23,12 @@ import LeggJournalpostPaKo from "./sider/LeggJournalpostPaKo";
 import PlanlagtVarsel from "./sider/PlanlagtVarsel";
 import OpprettLegeerklearing from "./sider/OpprettLegeerklearing";
 import Dialogmelding from "./sider/Dialogmelding";
+import OpprettPapirsykmelding from "./sider/OpprettPapirsykmelding";
 
 export const Sider = {
     OPPRETT_SYKMELDING: {tittel: "Opprett sykmelding", path: "/opprett_sykmelding", komponent: <OpprettSykmelding/>},
     OPPRETT_LEGEERKLEARING: {tittel: "Opprett Legeerklæring", path: "/opprett_legeerklearing", komponent: <OpprettLegeerklearing/>},
+    OPPRETT_PAPIRSYKMELDING: {tittel: "Opprett papirsykmelding", path: "/opprett_papirsykmelding", komponent: <OpprettPapirsykmelding/>},
     FINN_AKTORID: {tittel: "Finn aktør-ID fra fødselsnummer", path: "/finn_aktorid", komponent: <FinnAktorId/>},
     FINN_FNR: {tittel: "Finn fødselsnummer fra aktør-ID", path: "/finn_fnr", komponent: <FinnFnr/>},
     NULLSTILL_SYKMELDT: {tittel: "Nullstill sykmeldt", path: "/nullstill_sykmeldt", komponent: <NullstillSykmeldt/>},
