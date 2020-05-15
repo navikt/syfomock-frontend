@@ -141,7 +141,7 @@ export default function OpprettSykmelding() {
 
         }
         let data = new URLSearchParams({
-            fnr,
+            fnr: fnr.trim(),
             eid,
             syketilfelleStartDato: sdato,
             identdato: idato,
