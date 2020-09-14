@@ -14,7 +14,7 @@ import {
 import { Sider } from '../sider';
 import Side from '../components/Side/Side';
 import '../components/Pickr/flatpickr.less';
-import {Checkbox} from "nav-frontend-skjema";
+import { Checkbox } from 'nav-frontend-skjema';
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -31,11 +31,11 @@ export default function Dialogmelding() {
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "01117302624"});
     const [post, isLoaded, returverdi, error, setIsLoaded] = useFormPost();
     const [notat, notatInput] = useInput({label: "Notat"});
-    const [inklVedlegg, setInklVedlegg] = useState(false);
+    const [inkluderVedlegg, setInkluderVedlegg] = useState(false);
 
     const handleCheck = useCallback(() => {
-        setInklVedlegg(!inklVedlegg);
-    }, [inklVedlegg]);
+        setInkluderVedlegg(!inkluderVedlegg);
+    }, [inkluderVedlegg]);
 
 
     const handleSubmit = (event) => {
@@ -47,7 +47,7 @@ export default function Dialogmelding() {
             msgid,
             legefnr,
             notat,
-            inklVedlegg
+            inkluderVedlegg: inkluderVedlegg
         });
 
         post(API_URL + "/dialogmelding/opprett/", data);
@@ -71,10 +71,10 @@ export default function Dialogmelding() {
                     {notatInput}
                     <Checkbox
                         label="Inkludér vedlegg"
-                        name="inklVedlegg"
-                        key="inklVedlegg"
+                        name="inkluderVedlegg"
+                        key="inkluderVedlegg"
                         onClick={handleCheck}
-                        defaultChecked={inklVedlegg}
+                        defaultChecked={inkluderVedlegg}
                     />
                 </>
             }
