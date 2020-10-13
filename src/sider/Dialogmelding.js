@@ -24,6 +24,7 @@ const types = {
     VANLIG: 'VANLIG',
     VEDLEGG: 'VEDLEGG',
     SVAR_MOTEINNKALLING: 'SVAR_MOTEINNKALLING',
+    SVAR_FORESPORSEL: 'SVAR_FORESPORSEL',
 }
 
 export default function Dialogmelding() {
@@ -80,6 +81,7 @@ export default function Dialogmelding() {
                         <option key="Vanlig" value="VANLIG">{'Vanlig'}</option>
                         <option key="Vedlegg" value="VEDLEGG">{'Vedlegg'}</option>
                         <option key="Svar møteinnkalling" value="SVAR_MOTEINNKALLING">{'Svar Møteinnkalling'}</option>
+                        <option key="Save forespørsel" value="SVAR_FORESPORSEL">{'Svar forespørsel'}</option>
                     </Select>
                 </>
             }
