@@ -25,6 +25,7 @@ const types = {
     VEDLEGG: 'VEDLEGG',
     SVAR_MOTEINNKALLING: 'SVAR_MOTEINNKALLING',
     SVAR_FORESPORSEL: 'SVAR_FORESPORSEL',
+    SVAR_FORESPORSEL_VEDLEGG: 'SVAR_FORESPORSEL_VEDLEGG',
 }
 
 export default function Dialogmelding() {
@@ -82,6 +83,7 @@ export default function Dialogmelding() {
                         <option key="Vedlegg" value="VEDLEGG">{'Vedlegg'}</option>
                         <option key="Svar møteinnkalling" value="SVAR_MOTEINNKALLING">{'Svar Møteinnkalling'}</option>
                         <option key="Svar forespørsel" value="SVAR_FORESPORSEL">{'Svar forespørsel'}</option>
+                        <option key="Svar forespørsel vedlegg" value="SVAR_FORESPORSEL_VEDLEGG">{'Svar forespørsel med vedlegg'}</option>
                     </Select>
                 </>
             }
