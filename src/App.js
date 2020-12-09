@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import {Sider} from "./sider";
 
-export const API_URL = "https://syfomockproxy-q.nav.no";
+export const API_URL = "https://syfomockproxy.dev.nav.no";
 
 export default function App() {
     return (
