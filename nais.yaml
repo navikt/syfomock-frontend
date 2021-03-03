@@ -32,4 +32,3 @@ spec:
     cpuThresholdPercentage: 90
   ingresses:
     - "https://syfomock.dev-sbs.nais.io"
-    - "https://syfomock.dev.nav.no"
