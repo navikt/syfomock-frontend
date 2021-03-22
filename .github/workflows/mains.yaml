@@ -1,8 +1,5 @@
-name: Deploy to dev
-on:
-  push:
-    branches:
-      - 'master'
+name: Main
+on: push
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/syfomock-frontend:${{ github.sha }}
 jobs:
@@ -20,8 +17,15 @@ jobs:
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker build -t ${IMAGE} .
           docker push ${IMAGE}
+
+  deploy-dev:
+    if: github.ref == 'refs/heads/master'
+    name: Deploy to NAIS Dev-sbs
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
       - uses: nais/deploy/actions/deploy@v1
-        name: Deploy to dev-sbs
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-sbs
