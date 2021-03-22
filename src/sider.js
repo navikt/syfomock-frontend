@@ -13,12 +13,10 @@ import Aktivitetskrav from "./sider/Aktivitetskrav";
 import SlettDialogmoter from "./sider/SlettDialogmoter";
 import SlettMotebehov from "./sider/SlettMotebehov";
 import NullstillMotebehov from "./sider/NullstillMotebehov";
-import SlettVeilederoppgaver from "./sider/SlettVeilederoppgaver";
 import SlettOppfolgingsdialog from "./sider/SlettOppfolgingsdialog";
 import Testbrukere from "./sider/Testbrukere";
 import NullstillOppfolgingsdialog from "./sider/NullstillOppfolgingsdialog";
 import EndreOppfolgingsdialog from "./sider/EndreOppfolgingsdialog";
-import SettLegacyFelter from "./sider/SettLegacyFelter";
 import LeggJournalpostPaKo from "./sider/LeggJournalpostPaKo";
 import PlanlagtVarsel from "./sider/PlanlagtVarsel";
 import OpprettLegeerklearing from "./sider/OpprettLegeerklearing";
@@ -42,12 +40,10 @@ export const Sider = {
     SLETT_DIALOGMOTER: {tittel: "Slett dialogmøter", path: "/slett_dialogmoter", komponent: <SlettDialogmoter/>},
     SLETT_MOTEBEHOV: {tittel: "Slett møtebehov", path: "/slett_motebehov", komponent: <SlettMotebehov/>},
     NULLSTILL_MOTEBEHOV: {tittel: "Nullstill møtebehov for bruker", path: "/nullstill_motebehov", komponent: <NullstillMotebehov/>},
-    SLETT_VEILEDEROPPGAVER: {tittel: "Slett veilederoppgaver", path: "/slett_veilederoppgaver", komponent: <SlettVeilederoppgaver/>},
     SLETT_OPPFOLGINGSDIALOG: {tittel: "Slett oppfølgingsdialog", path: "/slett_oppfolgingsdialog", komponent: <SlettOppfolgingsdialog/>},
     NULLSTILL_OPPFOLGINGSDIALOG: {tittel: "Nullstill oppfølgingsdialoger for bruker", path: "/nullstill_oppfolgingsdialog", komponent: <NullstillOppfolgingsdialog/>},
     ENDRE_OPPFOLGINGSDIALOG: {tittel: "Endre oppfølgingsdialog", path: "/endre_oppfolgingsdialog", komponent: <EndreOppfolgingsdialog/>},
     PLANLAGT_VARSEL: {tittel: "Planlagt varsel", path: "/planlagt_varsel", komponent: <PlanlagtVarsel/>},
-    SETT_LEGACY_I_TILTAK: {tittel: "Sett legacyfelter i tiltak", path: "/sett_legacy_i_tiltak", komponent: <SettLegacyFelter/>},
     LEGG_JOURNALPOST_PA_KO: {tittel: "Legg journalpost (inntektsmelding) på kø", path: "/legg_journalpost_pa_ko", komponent: <LeggJournalpostPaKo/>},
     TESTBRUKERE_STATUS: {tittel: "Testbrukere oversikt", path: "/testbrukere", komponent: <Testbrukere/>},
     DIALOGMELDING: {tittel: "Dialogmelding", path: "/dialogmelding", komponent: <Dialogmelding />},
