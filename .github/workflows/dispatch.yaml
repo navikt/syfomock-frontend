@@ -1,0 +1,50 @@
+name: Deploy to dev-sbs
+
+on:
+  workflow_dispatch:
+    inputs:
+      gitCommit:
+        description: "Git ref to deploy (the complete hash):"
+        required: true
+        default: ""
+
+env:
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/syfomock-frontend:${{ github.event.inputs.gitCommit }}
+
+jobs:
+  build:
+    name: Check if built, if not, Checkout code and create docker tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: check if built
+        run: |
+          manifest=$(curl -X GET "https://docker.pkg.github.com/v2/navikt/syfomock-frontend/syfomock-frontend/manifests/${{ github.event.inputs.gitCommit }}" -u "$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}" | jq '.')
+          echo ${manifest}
+          found=$(echo "$manifest" | grep "schemaVersion" || true)
+          echo ${found}
+          echo "found_image=$found" >> $GITHUB_ENV
+      - name: Checkout code
+        if: ${{ !env.found_image }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.gitCommit }}
+      - name: Build and publish Docker image
+        if: ${{ !env.found_image }}
+        env:
+          NAME: syfomock-frontend
+          GITHUB_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        run: |
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker build -t ${IMAGE} .
+          docker push ${IMAGE}
+  deploy-dev:
+    name: Deploy to NAIS Dev-sbs
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-sbs
+          RESOURCE: nais.yaml
