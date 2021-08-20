@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import moment from 'moment';
 import {Undertekst, Undertittel} from "nav-frontend-typografi";
-import {Select, SkjemaGruppe} from "nav-frontend-skjema";
+import {Checkbox, Select, SkjemaGruppe} from "nav-frontend-skjema";
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
@@ -30,6 +30,10 @@ function antallPeriodeDager(perioder) {
 
 export default function OpprettPapirsykmelding() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
+    const [utenOcr, setUtenOcr] = useState(false);
+    const handleUtenOcr = useCallback(() => {
+        setUtenOcr(prevUtenOcr => !prevUtenOcr);
+    }, []);
     const startdato = moment().subtract(7, 'days');
     const [syketilfelleStartDato, syketilfelleInput] = useFlatpicker({
         label: "Startdato på syketilfelle",
@@ -99,6 +103,7 @@ export default function OpprettPapirsykmelding() {
 
         let data = new URLSearchParams({
             fnr,
+            utenOcr,
             syketilfelleStartDato,
             hpr,
             diagnosekode
@@ -129,6 +134,13 @@ export default function OpprettPapirsykmelding() {
         <form onSubmit={handleSubmit}>
             {fnrInput}
             {syketilfelleInput}
+            <Checkbox
+                label="Opprett papirsykmelding uten OCR"
+                name="utenOcr"
+                key="utenOcr"
+                onClick={handleUtenOcr}
+                checked={utenOcr}
+            />
             <div className="skjemaelement">
                 <div className="flex-container">
                     <label className="skjemaelement__label" htmlFor="diagnosekode">Diagnosekode</label>
