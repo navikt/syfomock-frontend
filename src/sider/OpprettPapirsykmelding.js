@@ -103,6 +103,7 @@ export default function OpprettPapirsykmelding() {
 
         let data = new URLSearchParams({
             fnr,
+            utenOcr,
             syketilfelleStartDato,
             hpr,
             diagnosekode
