@@ -32,8 +32,8 @@ export default function OpprettPapirsykmelding() {
     const [fnr, fnrInput] = useLocalStorageInput({label: "Fødselsnummer", key: "fnr"});
     const [utenOcr, setUtenOcr] = useState(false);
     const handleUtenOcr = useCallback(() => {
-        setUtenOcr(!utenOcr);
-    }, [utenOcr]);
+        setUtenOcr(prevUtenOcr => !prevUtenOcr);
+    }, []);
     const startdato = moment().subtract(7, 'days');
     const [syketilfelleStartDato, syketilfelleInput] = useFlatpicker({
         label: "Startdato på syketilfelle",
@@ -139,7 +139,7 @@ export default function OpprettPapirsykmelding() {
                 name="utenOcr"
                 key="utenOcr"
                 onClick={handleUtenOcr}
-                defaultChecked={utenOcr}
+                checked={utenOcr}
             />
             <div className="skjemaelement">
                 <div className="flex-container">
