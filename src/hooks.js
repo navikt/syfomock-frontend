@@ -129,6 +129,32 @@ export function useJsonGet() {
     return [get, isLoaded, returverdi, error, setReturverdi];
 }
 
+export function useDelete() {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [returverdi, setReturverdi] = useState('');
+    const [error, setError] = useState('');
+
+    const del = (url) => {
+        fetch(url, {
+            method: "DELETE"
+        })
+            .then(res => parseFetchResponse(res, "text"))
+            .then(res => {
+                if (res.meta.status === 200) {
+                    setReturverdi(res.body);
+                    setError("");
+                    setIsLoaded(true);
+                } else {
+                    setReturverdi("");
+                    res.body === "" ? setError(res.meta.statusText) : setError(res.body)
+                    setIsLoaded(true);
+                }
+            });
+    };
+
+    return [del, isLoaded, returverdi, error];
+}
+
 export function useFormPost() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [returverdi, setReturverdi] = useState('');
