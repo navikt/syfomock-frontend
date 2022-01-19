@@ -52,6 +52,7 @@ export default function OpprettSykmelding() {
     const [annenFravaersaarsak, setAnnenFravarsarsak] = useState("");
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "01117302624"});
     const [manglendeTilretteleggingPaaArbeidsplassen, setManglendeTilretteleggingPaaArbeidsplassen] = useState(false);
+    const [vedlegg, setVedlegg] = useState(false);
     const [perioder, setPerioder] = useState([{
         "fom": startdato.format("YYYY-MM-DD"),
         "tom": moment().subtract(1, 'days').format("YYYY-MM-DD"),
@@ -66,6 +67,10 @@ export default function OpprettSykmelding() {
     const handleManglendeTilretteleggingPaaArbeidsplassen = useCallback(() => {
         setManglendeTilretteleggingPaaArbeidsplassen(!manglendeTilretteleggingPaaArbeidsplassen);
     }, [manglendeTilretteleggingPaaArbeidsplassen]);
+
+    const handleVedlegg = useCallback(() => {
+        setVedlegg(!vedlegg);
+    }, [vedlegg]);
 
     const handlePeriodeChange = (event, idx) => {
         if (event.length === 2) {
@@ -152,6 +157,7 @@ export default function OpprettSykmelding() {
             legefnr,
             smtype,
             manglendeTilretteleggingPaaArbeidsplassen,
+            vedlegg,
             kontaktdato,
             begrunnikkekontakt,
             annenFravaersaarsak
@@ -262,6 +268,13 @@ export default function OpprettSykmelding() {
                     key="manglendeTilretteleggingPaaArbeidsplassen"
                     onClick={handleManglendeTilretteleggingPaaArbeidsplassen}
                     defaultChecked={manglendeTilretteleggingPaaArbeidsplassen}
+                />
+                <Checkbox
+                    label="Vedlegg"
+                    name="vedlegg"
+                    key="vedlegg"
+                    onClick={handleVedlegg}
+                    defaultChecked={vedlegg}
                 />
                 {kontaktdatoInput}
                 {begrunnikkekontaktInput}

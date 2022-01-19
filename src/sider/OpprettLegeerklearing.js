@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Undertekst, Undertittel} from "nav-frontend-typografi";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {Diagnoser} from "../Diagnoser";
@@ -9,6 +9,7 @@ import {useFormPost, useInput, useLocalStorageInput} from "../hooks";
 import {Sider} from "../sider";
 import Side from "../components/Side/Side";
 import '../components/Pickr/flatpickr.less';
+import {Checkbox} from "nav-frontend-skjema";
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -26,6 +27,11 @@ export default function OpprettLegeerklearing() {
     const [legefnr, legefnrInput] = useInput({label: "Fødselsnummer til lege", initialState: "01117302624"});
     const [post, isLoaded, returverdi, error, setIsLoaded] = useFormPost();
     const [statuspresens, statuspresensInput] = useInput({label: "statuspresens"});
+    const [vedlegg, setVedlegg] = useState(false);
+
+    const handleVedlegg = useCallback(() => {
+        setVedlegg(!vedlegg);
+    }, [vedlegg]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -36,7 +42,8 @@ export default function OpprettLegeerklearing() {
             msgid,
             diagnosekode,
             legefnr,
-            statuspresens
+            statuspresens,
+            vedlegg
         });
 
         post(API_URL + "/legerklaring/opprett/", data);
@@ -76,6 +83,13 @@ export default function OpprettLegeerklearing() {
                     {legefnrInput}
                     {msgidInput}
                     {statuspresensInput}
+                    <Checkbox
+                        label="Vedlegg"
+                        name="vedlegg"
+                        key="vedlegg"
+                        onClick={handleVedlegg}
+                        defaultChecked={vedlegg}
+                    />
                 </>
             }
             <Hovedknapp htmlType="button" onClick={handleSubmit} className='blokk-xs'>Send Legeerklearing</Hovedknapp>
